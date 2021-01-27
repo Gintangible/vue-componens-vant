@@ -1,8 +1,10 @@
 {
-  "name": "vue-components",
+  "name": "vant-components",
   "version": "1.0.0",
-  "description": "",
-  "main": "lib/vue-components.js",
+  "description": "gintangible 的通用组件",
+  "author": "gintangible",
+  "license": "MIT",
+  "main": "lib/vant-components.js",
   "style": "lib/index.css",
   "files": [
     "lib",
@@ -17,8 +19,6 @@
     "test:coverage": "open test/coverage/index.html",
     "build-site": "vant-cli build-site && gh-pages -d site"
   },
-  "author": "",
-  "license": "MIT",
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
@@ -56,5 +56,8 @@
   "browserslist": [
     "Android >= 4.0",
     "iOS >= 8"
-  ]
+  ],
+  "dependencies": {
+    "vant": "^2.12.6"
+  }
 }
