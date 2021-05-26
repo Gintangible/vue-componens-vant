@@ -34,7 +34,7 @@ import { Cell, Switch } from 'vant';
  * @author gintangible
  */
 export default {
-  name: 'SwitchCell',
+  name: 'switch-cell',
   components: {
     [Cell.name]: Cell,
     [Switch.name]: Switch,

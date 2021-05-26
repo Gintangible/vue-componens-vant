@@ -43,6 +43,20 @@ module.exports = {
           },
         ],
       },
+      // 其他功能的组件库
+      {
+        title: '功能组件',
+        items: [
+          {
+            path: 'identify',
+            title: '验证码控件',
+          },
+          // {
+          //   path: 'signature',
+          //   title: '电子签名控件',
+          // },
+        ],
+      },
     ],
   },
 };

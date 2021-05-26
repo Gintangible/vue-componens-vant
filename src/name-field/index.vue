@@ -39,7 +39,7 @@ import { Field, Cell } from 'vant';
  */
 
 export default {
-  name: 'NameField',
+  name: 'name-field',
   components: {
     [Field.name]: Field,
     [Cell.name]: Cell,
@@ -75,14 +75,14 @@ export default {
       this.name = newValue;
     },
   },
-  mounted() {
+  created() {
     this.name = this.value;
   },
   methods: {
     // 用户点击输入框后触发此事件。
     onClick() {
       if (this.readonly) {
-        const label = this.label;//  removemidspace(this.label);
+        const {label} = this;//  removemidspace(this.label);
         Toast(`${label}不可更改`);
       }
     },
@@ -90,7 +90,7 @@ export default {
     // 当姓名输入框被修改时触发此事件。
     onChange(value) {
       // 转换为大写，但不能删除头尾空格，否则就无法输入中间带空格的字符串
-      this.name = value; //uppercaseString(value);
+      this.name = value; // uppercaseString(value);
       // 触发 clear-error 事件
       this.$emit('clear-error');
       // 触发 input 事件
@@ -101,7 +101,7 @@ export default {
     onBlur(e) {
       if (!this.readonly) {
         // 去除头尾空格并转换为大写
-        this.name = this.name; //trimUppercaseString(this.name);
+        this.name = this.name; // trimUppercaseString(this.name);
         this.$emit('input', this.name);
         // 触发 change 事件
         this.$emit('change', this.name);

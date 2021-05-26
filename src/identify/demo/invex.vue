@@ -1,18 +1,8 @@
 <template>
   <van-form>
-    <mobile-field
-      v-model="mobile"
-      :readonly="readonly"
-      @change="onChange"
-      @clear-error="onClearError"
-      @error="onError"
-    />
-    <switch-cell
-      v-model="readonly"
-      title="是否只读"
-    />
+    <identify :identifyCode="identifyCode" />
     <van-field
-      v-model="mobile"
+      v-model="identifyCode"
       label="输入的值"
       clearable
     />
@@ -29,25 +19,22 @@
 </template>
 <script>
 import {
-  Form, Field, List, Cell,
+  Field, List, Cell,
 } from 'vant';
-import SwitchCell from '../../switch-cell';
-import MobileField from '../index';
+import Identify from '../index';
 
 /**
- * {@link MobileField}的使用例子。
+ * {@link identify}的使用例子。
  *
  * @author gintangible
  */
 export default {
-  name: 'mobile-field-demo',
+  name: 'identify-demo',
   components: {
-    [Form.name]: Form,
     [Field.name]: Field,
     [List.name]: List,
     [Cell.name]: Cell,
-    [SwitchCell.name]: SwitchCell,
-    [MobileField.name]: MobileField,
+    [Identify.name]: Identify,
   },
   data() {
     return {

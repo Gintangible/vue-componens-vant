@@ -37,7 +37,7 @@ import { Field, Cell, Toast } from 'vant';
  */
 
 export default {
-  name: 'MobileField',
+  name: 'mobile-field',
   components: {
     [Field.name]: Field,
     [Cell.name]: Cell,
@@ -81,7 +81,7 @@ export default {
     onClick() {
       if (this.readonly) {
         // 注意标签可能含有空格，但提示信息中不应该有空格，此方案仅适用于中文标签，英文则不适合
-        const label = this.label; // removemidspace(this.label);
+        const {label} = this; // removemidspace(this.label);
         Toast(`${label}不可更改`);
       }
     },

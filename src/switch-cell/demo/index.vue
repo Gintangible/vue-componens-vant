@@ -50,7 +50,7 @@ import SwitchCell from '../index';
  * @author gintangible
  */
 export default {
-  name: 'SwitchCellDemo',
+  name: 'switch-cell-demo',
   components: {
     [Form.name]: Form,
     [Field.name]: Field,

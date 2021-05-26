@@ -1,10 +1,3 @@
-<!------------------------------------------------------------------------------
--
--    Copyright (c) 2017 - 2020
--    Nanjing Smart Medical Investment Operation Service Co. Ltd.
--    All rights reserved.
--
-------------------------------------------------------------------------------->
 <template>
   <van-form>
     <name-field
@@ -47,7 +40,7 @@ import NameField from '../index';
  * @author gintangible
  */
 export default {
-  name: 'NameFieldDemo',
+  name: 'name-field-demo',
   components: {
     [Form.name]: Form,
     [Field.name]: Field,
