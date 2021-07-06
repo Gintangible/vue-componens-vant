@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { Field, Cell } from 'vant';
+import { Field, Toast } from 'vant';
 
 /**
  * 姓名输入框控件。
@@ -42,7 +42,6 @@ export default {
   name: 'name-field',
   components: {
     [Field.name]: Field,
-    [Cell.name]: Cell,
   },
   model: {
     prop: 'value',
@@ -82,7 +81,7 @@ export default {
     // 用户点击输入框后触发此事件。
     onClick() {
       if (this.readonly) {
-        const {label} = this;//  removemidspace(this.label);
+        const { label } = this;//  removemidspace(this.label);
         Toast(`${label}不可更改`);
       }
     },
@@ -97,7 +96,7 @@ export default {
       this.$emit('input', this.name);
     },
 
-    // 当姓名输入框失去输入焦点时触发此事件。
+    // 当输入框失去输入焦点时触发此事件。
     onBlur(e) {
       if (!this.readonly) {
         // 去除头尾空格并转换为大写
@@ -105,12 +104,6 @@ export default {
         this.$emit('input', this.name);
         // 触发 change 事件
         this.$emit('change', this.name);
-        // 验证输入框内容是否合法
-        // const result = Name.validate(this.name);
-        // if (!result.success) {
-        //   // 触发 error 事件
-        //   this.$emit('error', result.description);
-        // }
       }
     },
   },

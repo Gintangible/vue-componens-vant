@@ -1,19 +1,22 @@
 <template>
   <van-form>
-    <mobile-field
-      v-model="mobile"
+    <enum-select
+      v-model="type"
+      label="证件类型"
+      placeholder="请选择证件类型"
+      :columns="columns"
       :readonly="readonly"
+      :rules="rules"
+      @confirm="onConfirm"
       @change="onChange"
-      @clear-error="onClearError"
-      @error="onError"
     />
     <switch-cell
       v-model="readonly"
       title="是否只读"
     />
     <van-field
-      v-model="mobile"
-      label="输入的值"
+      v-model="type"
+      label="选中的值"
       clearable
     />
     <van-cell title="事件" />
@@ -32,40 +35,41 @@ import {
   Form, Field, List, Cell,
 } from 'vant';
 import SwitchCell from '../../switch-cell';
-import MobileField from '../index';
+import EnumSelect from '../index';
 
-/**
- * {@link MobileField}的使用例子。
- *
- * @author gintangible
- */
+// EnumSelect 的使用例子。
+
 export default {
-  name: 'mobile-field-demo',
+  name: 'EnumSelectDemo',
   components: {
     [Form.name]: Form,
     [Field.name]: Field,
     [List.name]: List,
     [Cell.name]: Cell,
     [SwitchCell.name]: SwitchCell,
-    [MobileField.name]: MobileField,
+    [EnumSelect.name]: EnumSelect,
   },
   data() {
     return {
-      mobile: '',
+      columns: CREDENTIAL_TYPES,
+      type: CredentialType.IDENTITY_CARD.value,
       readonly: false,
       count: 0,
       events: [],
+      rules: [{
+        required: true,
+        message: '选择身份证外提示错误',
+        trigger: 'onChange',
+        validator: (val) => val === '身份证',
+      }],
     };
   },
   methods: {
+    onConfirm(value) {
+      this.events.unshift({ order: ++this.count, name: 'confirm', param: value });
+    },
     onChange(value) {
       this.events.unshift({ order: ++this.count, name: 'change', param: value });
-    },
-    onClearError() {
-      this.events.unshift({ order: ++this.count, name: 'clear-error', param: '' });
-    },
-    onError(value) {
-      this.events.unshift({ order: ++this.count, name: 'error', param: value });
     },
   },
 };

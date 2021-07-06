@@ -38,8 +38,26 @@ module.exports = {
             title: '姓名输入框控件',
           },
           {
-            path: 'mobile-field',
-            title: '手机号码输入框控件',
+            path: 'enum-select',
+            title: '枚举控件',
+          },
+          {
+            path: 'data-select',
+            title: '日期选择控件',
+          },
+          {
+            path: 'data-range',
+            title: '日期区间控件',
+          },
+        ],
+      },
+      // 其他功能的组件库
+       {
+        title: '复合组件',
+        items: [
+          {
+            path: 'faq-list',
+            title: '产品常见问题列表控件',
           },
         ],
       },
@@ -51,10 +69,10 @@ module.exports = {
             path: 'identify',
             title: '验证码控件',
           },
-          // {
-          //   path: 'signature',
-          //   title: '电子签名控件',
-          // },
+          {
+            path: 'signature',
+            title: '电子签名控件',
+          },
         ],
       },
     ],
