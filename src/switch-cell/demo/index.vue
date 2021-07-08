@@ -1,5 +1,5 @@
 <template>
-  <van-form>
+  <div>
     <switch-cell
       v-model="value"
       :title="title"
@@ -36,7 +36,7 @@
         :value="e.param"
       />
     </van-list>
-  </van-form>
+  </div>
 </template>
 <script>
 import {
