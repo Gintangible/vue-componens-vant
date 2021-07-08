@@ -2,6 +2,9 @@
   <div>
     <faq-list
       :faqs="faqs"
+    />
+    <faq-list
+      :faqs="faqs"
       filter="f1"
       :default-show-length="3"
     />

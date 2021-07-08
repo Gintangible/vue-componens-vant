@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-cell
-      title="常见问题"
+      :title="常见问题"
       title-class="title-class"
     />
     <van-collapse
@@ -55,13 +55,13 @@ export default {
       type: Array,
       required: true,
     },
-    filter: {
+    filter: {                         // 过滤条件，没有的时候 list = faqs
       type: String,
       default: '',
     },
     defaultShowLength: {              // 默认显示的问题数目。
       type: Number,
-      default: 8,
+      default: 6,
     },
   },
   data() {
@@ -73,7 +73,7 @@ export default {
   },
   mounted() {
     if (this.filter) {
-      this.list = this.faqs.filter((i) => i.filter.includes(this.filter));
+      this.list = this.faqs.filter((i) => (!i.filter || i.filter.includes(this.filter)));
     } else {
       this.list = this.faqs;
     }
