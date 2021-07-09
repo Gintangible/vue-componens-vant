@@ -66,7 +66,7 @@ module.exports = {
             title: '产品常见问题列表控件',
           },
           {
-            path: 'identify',
+            path: 'identify-code',
             title: '验证码控件',
           },
           {

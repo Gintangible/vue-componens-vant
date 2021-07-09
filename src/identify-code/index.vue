@@ -1,18 +1,18 @@
 <template>
-  <div class="identify-wrap">
+  <div class="identify-code-wrap">
     <canvas
-      id="identify-canvas"
-      ref="identifyCanvas"
+      id="identify-code-canvas"
+      ref="ctx"
       :width="width"
       :height="height"
-    />
+    ></canvas>
   </div>
 </template>
 
 <script>
 
 export default {
-  name: 'Identify',
+  name: 'identify',
   props: {
     identifyCode: {
       type: String,
@@ -78,7 +78,7 @@ export default {
     }
   },
   mounted() {
-    this.ctx = this.$refs.identifyCanvas.getContext('2d');
+    this.ctx = this.$refs.ctx.getContext('2d');
     this.drawPic();
   },
   methods: {
