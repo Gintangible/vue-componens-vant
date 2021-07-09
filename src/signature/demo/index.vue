@@ -43,7 +43,7 @@ import Signature from '../index';
  * @author gintangible
  */
 export default {
-  name: 'name-field-demo',
+  name: 'signature-demo',
   components: {
     [Form.name]: Form,
     [Field.name]: Field,
@@ -62,10 +62,17 @@ export default {
   },
   methods: {
     signConfirm(base64) {
-      this.events.unshift({ order: ++this.count, name: 'confirm', param: base64.split(';')[0] });
+      this.events.unshift({
+        order: ++this.count,
+        name: 'confirm',
+        param: base64.split(';')[0]
+      });
     },
     signClear() {
-      this.events.unshift({ order: ++this.count, name: 'clear'});
+      this.events.unshift({
+        order: ++this.count,
+        name: 'clear'
+      });
     },
   },
 };

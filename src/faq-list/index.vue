@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-cell
-      :title="常见问题"
+      title="常见问题"
       title-class="title-class"
     />
     <van-collapse

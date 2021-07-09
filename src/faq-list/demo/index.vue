@@ -22,7 +22,7 @@ import FAQS from './faqs';
 // FaqList 的使用例子。
 
 export default {
-  name: 'FaqListDemo',
+  name: 'faq-list-demo',
   components: {
     [FaqList.name]: FaqList,
   },

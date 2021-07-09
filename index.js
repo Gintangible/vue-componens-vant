@@ -1,6 +1,6 @@
-import Identify from './src/identify';
+import FaqList from './src/faq-list';
 
-import MobileField from './src/mobile-field';
+import Identify from './src/identify';
 
 import NameField from './src/name-field';
 
@@ -8,9 +8,9 @@ import Signature from './src/signature';
 import SwitchCell from './src/switch-cell';
 
 export {
-  Identify,
+  FaqList,
 
-  MobileField,
+  Identify,
 
   NameField,
 

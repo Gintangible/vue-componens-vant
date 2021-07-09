@@ -30,10 +30,6 @@ module.exports = {
         title: '基础组件',
         items: [
           {
-            path: 'switch-cell',
-            title: '组合Cell和Switch的开关控件',
-          },
-          {
             path: 'name-field',
             title: '姓名输入框控件',
           },
@@ -49,22 +45,26 @@ module.exports = {
             path: 'data-range',
             title: '日期区间控件',
           },
+          {
+            path: 'switch-cell',
+            title: '组合Cell和Switch的开关控件',
+          },
         ],
       },
+      // 复合组件
+      // {
+      //   title: '复合组件',
+      //   items: [
+      //   ],
+      // },
       // 其他功能的组件库
-       {
-        title: '复合组件',
+      {
+        title: '业务组件',
         items: [
           {
             path: 'faq-list',
             title: '产品常见问题列表控件',
           },
-        ],
-      },
-      // 其他功能的组件库
-      {
-        title: '功能组件',
-        items: [
           {
             path: 'identify',
             title: '验证码控件',
