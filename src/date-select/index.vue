@@ -91,7 +91,7 @@ const DATETIME_PICKER_TIME_FORMAT = 'HH:mm';
  * @author gintangible
  */
 export default {
-  name: 'DatetimeSelect',
+  name: 'datetime-select',
   components: {
     [Field.name]: Field,
     [DatetimePicker.name]: DatetimePicker,
@@ -186,12 +186,10 @@ export default {
   },
   watch: {
     value(newValue) {
-      logger.debug('DatetimeSelect.watch.value: newValue = {0}', newValue);
       this.$_updateUI(newValue);
     },
   },
   mounted() {
-    logger.debug('DatetimeSelect.mounted: value = {0}, type = {1}', this.value, this.type);
     const me = this;
     this.$nextTick(() => {
       me.$_updateUI(this.value);
@@ -211,7 +209,6 @@ export default {
 
     // 修改选项下拉框选项后触发的事件。
     onConfirm(e) {
-      logger.debug('DatetimeSelect.onConfirm: e = {0}', e);
       this.showPicker = false;
       // 注意：这里无需再调用 $_updateUI()，因为下面的语句触发了 input 事件，而
       // value 是作为 v-model 被绑定到本组件，因此 input 事件必然会自动
@@ -223,10 +220,7 @@ export default {
       } else {
         newValue = dayjs(e).format(this.valueFormat);
       }
-      logger.debug('DatetimeSelect.onConfirm: fire [input] event: {0}', newValue);
       this.$emit('input', newValue);
-      // 触发 change 事件
-      logger.debug('DatetimeSelect.onConfirm: fire [change] event: {0}', newValue);
       this.$emit('change', newValue);
     },
 
@@ -255,7 +249,6 @@ export default {
 
     // 更新UI界面
     $_updateUI(newValue) {
-      logger.debug('DatetimeSelect.$_updateUI: newValue = {0}', newValue);
       if (newValue === null || newValue === '') {
         this.name = '';
         if (this.defaultSelected) {

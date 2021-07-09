@@ -97,10 +97,10 @@ export default {
     },
 
     // 当输入框失去输入焦点时触发此事件。
-    onBlur(e) {
+    onBlur() {
       if (!this.readonly) {
         // 去除头尾空格并转换为大写
-        this.name = this.name; // trimUppercaseString(this.name);
+        // this.name = trimUppercaseString(this.name);
         this.$emit('input', this.name);
         // 触发 change 事件
         this.$emit('change', this.name);

@@ -45,10 +45,11 @@
 
 <script>
 import DatetSelect from '../date-select';
+import clone from '@/utils/clone';
 import dayjs from 'dayjs';
 
 export default {
-  name: 'DatetimeRange',
+  name: 'datetime-range',
   components: {
     [DatetSelect.name]: DatetSelect,
   },

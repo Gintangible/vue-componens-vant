@@ -52,7 +52,7 @@ import SignaturePad from 'signature_pad';
 import alert from '../utils/alert';
 
 export default {
-  name: 'Signature',
+  name: 'signature',
   components: {
     [Button.name]: Button,
     [VanImage.name]: VanImage,

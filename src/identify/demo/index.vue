@@ -1,6 +1,8 @@
 <template>
   <div>
-    <identify :identify-code="identifyCode" />
+    <identify :identify-code="identifyCode" :width="200"/>
+    <identify />
+    <identify :identify-code="['ab', 'b', 'c']"/>
     <van-field
       v-model="identifyCode"
       label="输入的值"
@@ -25,7 +27,7 @@ export default {
   },
   data() {
     return {
-      identifyCode: 'ABCD',
+      identifyCode: 'Gintangible',
     };
   },
 };

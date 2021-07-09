@@ -44,7 +44,7 @@ import { Collapse, CollapseItem, Cell } from 'vant';
  *     默认显示的问题数目
  */
 export default {
-  name: 'FaqList',
+  name: 'faq-list',
   components: {
     [Collapse.name]: Collapse,
     [CollapseItem.name]: CollapseItem,

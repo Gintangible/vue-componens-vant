@@ -15,8 +15,8 @@ export default {
   name: 'identify',
   props: {
     identifyCode: {
-      type: String,
-      default: '1234'
+      type: [String, Array],
+      default: 'ABCD'
     },
     fontSizeMin: {
       type: Number,

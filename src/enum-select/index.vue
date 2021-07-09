@@ -62,7 +62,7 @@ import {
  * @author gintangible
  */
 export default {
-  name: 'EnumSelect',
+  name: 'enum-select',
   components: {
     [Field.name]: Field,
     [Picker.name]: Picker,
@@ -127,7 +127,6 @@ export default {
   methods: {
     // 用户点击选项输入框后触发此事件。
     onClick() {
-      logger.debug('EnumSelect.onClick');
       if (!this.readonly) {
         this.showPicker = true;
       } else {
@@ -138,30 +137,23 @@ export default {
     // 修改选项下拉框选项后触发的事件。
 
     onConfirm(item) {
-      logger.debug('EnumSelect.onConfirm: item = {0}', item);
       this.showPicker = false;
       // 注意：这里无需再调用 $_updateUI()，因为下面的语句触发了 input 事件，而
       // value 是作为 v-model 被绑定到本组件，因此 input 事件必然会自动
       // 更新 value 的值，而 value 更新后会触发对其的 watch 函数，
       // 该函数中会调用 $_updateUI() 方法。
-      logger.debug('EnumSelect.onConfirm: fire [input] event: {0}', item.value);
       this.$emit('input', item.value);
       // 触发 confirm 事件
-      logger.debug('EnumSelect.onConfirm: fire [confirm] event: {0}', item.value);
       this.$emit('confirm', item.value);
     },
 
     // 修改选项下拉框选项后触发的事件。
     onChange(picker, item) {
-      logger.debug('EnumSelect.onChange: item = {0}', item);
-      // 触发 change 事件
-      logger.debug('EnumSelect.onChange: fire [change] event: {0}', item.value);
       this.$emit('change', item.value);
     },
 
     // 更新UI界面。
     $_updateUI(newValue) {
-      logger.debug('EnumSelect.$_updateUI: newValue = {0}', newValue);
       if (newValue === null || newValue === '') {
         this.name = '';
         this.$_updatePicker(0);
@@ -169,7 +161,6 @@ export default {
         // 查找枚举值对应的索引
         const index = this.columns.findIndex((e) => e.value === newValue);
         if (index < 0) {
-          logger.warn('Invalid selected value: {0}', newValue);
           this.name = '';
           this.$_updatePicker(0);
         } else {
@@ -186,12 +177,11 @@ export default {
      *     新的选中项的索引。
      */
     $_updatePicker(index) {
-      logger.debug('EnumSelect.$_updatePicker: index = {0}', index);
       // 当 mounted() 函数调用 $_updateUI() 方法时，因为vant的Popup组件尚不可见，所以
       // vant的Picker组件尚未被渲染，this.$refs.picker 为undefined；
       // 此时只能通过绑定属性设置 Picker 的 defaultIndex 值
       this.defaultIndex = index;
-      const picker = this.$refs.picker;
+      const {picker} = this.$refs;
       if (picker) {
         picker.setIndexes = [index];
       }

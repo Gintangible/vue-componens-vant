@@ -120,7 +120,7 @@ import DatetimeSelect from '../index';
  * @author gintangible
  */
 export default {
-  name: 'DatetimeSelectDemo',
+  name: 'datetime-select-demo',
   components: {
     [Form.name]: Form,
     [Field.name]: Field,
