@@ -40,6 +40,7 @@
 import {
   Field, Picker, Popup, Toast,
 } from 'vant';
+import removemidspace from '../utils/removemidspace'
 
 // 枚举类型下拉选择框。
 export default {
@@ -107,7 +108,7 @@ export default {
     // 用户点击选项输入框后触发此事件。
     onClick() {
       if (this.readonly) {
-        Toast(`${this.label}不可更改`);
+        Toast(`${removemidspace(this.label)}不可更改`);
         return;
       }
       this.showPicker = true;

@@ -22,8 +22,8 @@
     <van-cell title="事件" />
     <van-list>
       <van-cell
-        v-for="e in events"
-        :key="e.name"
+        v-for="(e, i) in events"
+        :key="i"
         :title="e.order + ': ' + e.name"
         :value="e.param"
       />

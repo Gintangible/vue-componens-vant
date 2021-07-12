@@ -2,7 +2,7 @@
   <div class="datetime-select van-cell">
     <van-field
       :required="required"
-      :value="name"
+      :value="text"
       :label="label"
       :placeholder="placeholder"
       readonly
@@ -39,57 +39,14 @@ import {
   Field, DatetimePicker, Popup, Toast,
 } from 'vant';
 import dayjs from 'dayjs';
+import removemidspace from '../utils/removemidspace'
 
 /**
  * Vant的{@link DatetimePicker}组件的时间格式。
  */
 const DATETIME_PICKER_TIME_FORMAT = 'HH:mm';
 
-/**
- * 枚举类型下拉选择框。
- *
- * @property {String} value
- *     以{@code v-model}双向绑定的日期时间的数值，以字符串形式表示，格式为
- *     {@link #valueFormat}。
- * @property {String} type
- *     可选，选择类型，可能值为'datetime'(选择完整日期时间，包括年、月、日、小时、分钟)，
- *     'date'(选择年、月、日), 'time'(选择时间，即小时、分钟), 'year-month'
- *     (选择年、月), 'month-day'(选择月、日), 'datehour'(选择年、月、日、小时)。
- *     默认值为'datetime'。
- * @property {String} valueFormat
- *     可选，选中的日期时间数值的格式。默认值为'YYYY-MM-DDTHH:mmZ'。
- * @property {String} displayFormat
- *     可选，选中的日期时间在选择框中显示的格式。默认值为'YYYY年MM月DD日HH时mm分'。
- * @property {String} label
- *     可选，日期时间选择框标签。默认值为'日期时间'。
- * @property {String} placeholder
- *     可选，日期时间选择框提示文字。默认值为'请选择日期时间'。
- * @property {Date} minDate
- *     可选，当类型{@link #type}为'date'、'datetime'、'year-month'、'month-day'时，支
- *     持此参数，表示可选的最小时间，精确到分钟。默认值为十年前。
- * @property {Date} maxDate
- *     可选，当类型{@link #type}为'date'、'datetime'、'year-month'、'month-day'时，支
- *     持此参数，表示可选的最大时间，精确到分钟。默认值为十年后。
- * @property {Number} minHour
- *     可选，当类型{@link #type}为'time'或'datehour'时，支持此参数，表示可选的最小小时
- *     数，默认值为{@code 0}。
- * @property {Number} maxHour
- *     可选，当类型{@link #type}为'time'或'datehour'时，支持此参数，表示可选的最大小时
- *     数，默认值为{@code 23}。
- * @property {Number} minMinute
- *     可选，当类型{@link #type}为'time'或'datehour'时，支持此参数，表示可选的最小分钟
- *     数，默认值为{@code 0}。
- * @property {Number} maxMinute
- *     可选，当类型{@link #type}为'time'或'datehour'时，支持此参数，表示可选的最大分钟
- *     数，默认值为{@code 59}。
- * @property {String} defaultSelected
- *     可选，默认选择的日期时间。若{@code v-model}双向绑定的{@link #value}为null或空字
- *     符串，点开日期时间选择框后，默认选择的日期时间为此参数值。此参数以字符串
- *     形式表示日期时间，格式为{@link #valueFormat}。此参数可选，默认值为空。
- * @property {Boolean} readonly
- *     可选，表示选项框中选择的日期时间是否不可更改。默认值为{@code false}。
- * @author gintangible
- */
+// 枚举类型下拉选择框。
 export default {
   name: 'datetime-select',
   components: {
@@ -124,7 +81,7 @@ export default {
       default: '',
     },
     // 右侧图片
-    rightIcon: {               // 见 van-field right-icon
+    rightIcon: {          // 见 van-field right-icon
       type: String,
       default: '',
     },
@@ -180,7 +137,7 @@ export default {
   data() {
     return {
       showPicker: false,  //  是否显示选项下拉框
-      name: '',           //  当前选中的日期时间的显示名称
+      text: '',           //  当前选中的日期时间的显示名称
       selected: null,     //  当前选中的日期时间值
     };
   },
@@ -190,30 +147,23 @@ export default {
     },
   },
   mounted() {
-    const me = this;
     this.$nextTick(() => {
-      me.$_updateUI(this.value);
+      this.$_updateUI(this.value);
     });
   },
   methods: {
     // 用户点击选项输入框后触发此事件。
     onClick() {
-      if (!this.readonly) {
-        this.showPicker = true;
-      } else {
-        // 注意标签可能含有空格，但提示信息中不应该有空格，此方案仅适用于中文标签，英文则不适合
-        const { label } = this;
-        Toast(`${label}不可更改`);
+      if (this.readonly) {
+        Toast(`${removemidspace(this.label)}不可更改`);
+        return;
       }
+      this.showPicker = true;
     },
 
     // 修改选项下拉框选项后触发的事件。
     onConfirm(e) {
       this.showPicker = false;
-      // 注意：这里无需再调用 $_updateUI()，因为下面的语句触发了 input 事件，而
-      // value 是作为 v-model 被绑定到本组件，因此 input 事件必然会自动
-      // 更新 value 的值，而 value 更新后会触发对其的 watch 函数，
-      // 该函数中会调用 $_updateUI() 方法。
       let newValue;
       if (this.type === 'time') {
         newValue = dayjs(e, DATETIME_PICKER_TIME_FORMAT).format(this.valueFormat);
@@ -226,35 +176,33 @@ export default {
 
     // 日期时间字段单位格式化函数。
     formatter(type, value) {
-      if (type === 'year') {
-        return `${value}年`;
+      switch (type) {
+        case 'year':
+          return `${value}年`;
+        case 'month':
+          return `${value}月`;
+        case 'day':
+          return `${value}日`;
+        case 'hour':
+          return `${value}时`;
+        case 'minute':
+          return `${value}分`;
+        case 'second':
+          return `${value}秒`;
+        default:
+          return value;
       }
-      if (type === 'month') {
-        return `${value}月`;
-      }
-      if (type === 'day') {
-        return `${value}日`;
-      }
-      if (type === 'hour') {
-        return `${value}时`;
-      }
-      if (type === 'minute') {
-        return `${value}分`;
-      }
-      if (type === 'second') {
-        return `${value}秒`;
-      }
-      return value;
     },
 
     // 更新UI界面
     $_updateUI(newValue) {
-      if (newValue === null || newValue === '') {
-        this.name = '';
+      if (!newValue) {
+        this.text = '';
         if (this.defaultSelected) {
           const time = dayjs(this.defaultSelected, this.valueFormat);
           if (this.type === 'time') {
             this.selected = time.format(DATETIME_PICKER_TIME_FORMAT);
+              console.log('gxw get ', time);
           } else {
             this.selected = time.toDate();
           }
@@ -263,7 +211,7 @@ export default {
         }
       } else {
         const time = dayjs(newValue, this.valueFormat);
-        this.name = time.format(this.displayFormat);
+        this.text = time.format(this.displayFormat);
         if (this.type === 'time') {
           this.selected = time.format(DATETIME_PICKER_TIME_FORMAT);
         } else {

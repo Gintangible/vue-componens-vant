@@ -27,7 +27,7 @@
     "@vant/cli": "^2.0.0",
     "babel-plugin-import": "^1.13.0",
     "vue": "^2.6.11",
-    "vant": "2.10.14",
+    "vant": "^2.12.23",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {

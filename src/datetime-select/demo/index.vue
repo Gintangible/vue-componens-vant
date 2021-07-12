@@ -6,7 +6,7 @@
         title="是否只读"
       />
     </van-form>
-    <van-form>
+    <!-- <van-form>
       <datetime-select
         v-model="datetime"
         label="日期时间rule"
@@ -37,7 +37,7 @@
         clearable
       />
       <van-cell />
-    </van-form>
+    </van-form> -->
     <van-form>
       <datetime-select
         v-model="time"
@@ -115,12 +115,12 @@ import SwitchCell from '../../switch-cell';
 import DatetimeSelect from '../index';
 
 /**
- * {@link DatetimeSelect}的使用例子。
+ * {@link DateSelect}的使用例子。
  *
  * @author gintangible
  */
 export default {
-  name: 'datetime-select-demo',
+  name: 'date-select-demo',
   components: {
     [Form.name]: Form,
     [Field.name]: Field,

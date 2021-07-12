@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import DatetSelect from '../date-select';
+import DatetSelect from '../datetime-select';
 import clone from '../utils/clone';
 import dayjs from 'dayjs';
 
