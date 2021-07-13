@@ -166,7 +166,7 @@ export default {
       this.showPicker = false;
       let newValue;
       if (this.type === 'time') {
-        newValue = dayjs(e, DATETIME_PICKER_TIME_FORMAT).format(this.valueFormat);
+        newValue = e;
       } else {
         newValue = dayjs(e).format(this.valueFormat);
       }
@@ -201,8 +201,7 @@ export default {
         if (this.defaultSelected) {
           const time = dayjs(this.defaultSelected, this.valueFormat);
           if (this.type === 'time') {
-            this.selected = time.format(DATETIME_PICKER_TIME_FORMAT);
-              console.log('gxw get ', time);
+            this.selected = newValue;
           } else {
             this.selected = time.toDate();
           }
@@ -211,13 +210,19 @@ export default {
         }
       } else {
         const time = dayjs(newValue, this.valueFormat);
-        this.text = time.format(this.displayFormat);
         if (this.type === 'time') {
-          this.selected = time.format(DATETIME_PICKER_TIME_FORMAT);
+          this.selected = newValue;
+          this.text = this.formatTimeText(newValue);
         } else {
           this.selected = time.toDate();
+          this.text = time.format(this.displayFormat);
         }
       }
+    },
+
+    // 格式化时间
+    formatTimeText(newValue) {
+      return newValue.replace(/^(.*):(.*)/g, '$1时$2分');
     },
   },
 };
