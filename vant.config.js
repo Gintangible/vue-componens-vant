@@ -41,10 +41,10 @@ module.exports = {
             path: 'datetime-select',
             title: '日期选择控件',
           },
-          // {
-          //   path: 'datetime-range',
-          //   title: '日期区间控件',
-          // },
+          {
+            path: 'datetime-range',
+            title: '日期区间控件',
+          },
           {
             path: 'switch-cell',
             title: '组合Cell和Switch的开关控件',

@@ -44,7 +44,6 @@ import removemidspace from '../utils/removemidspace'
 /**
  * Vant的{@link DatetimePicker}组件的时间格式。
  */
-const DATETIME_PICKER_TIME_FORMAT = 'HH:mm';
 
 // 枚举类型下拉选择框。
 export default {
@@ -171,7 +170,7 @@ export default {
         newValue = dayjs(e).format(this.valueFormat);
       }
       this.$emit('input', newValue);
-      this.$emit('change', newValue);
+      this.$emit('confirm', newValue);
     },
 
     // 日期时间字段单位格式化函数。

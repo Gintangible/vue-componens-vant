@@ -6,7 +6,7 @@
         title="是否只读"
       />
     </van-form>
-    <!-- <van-form>
+    <van-form>
       <datetime-select
         v-model="datetime"
         label="日期时间rule"
@@ -37,7 +37,7 @@
         clearable
       />
       <van-cell />
-    </van-form> -->
+    </van-form>
     <van-form>
       <datetime-select
         v-model="time"

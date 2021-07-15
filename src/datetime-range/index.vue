@@ -1,19 +1,20 @@
 <template>
   <div class="datetime-range">
     <div class="datetime-range-select">
-      <date-select
-        v-model="datetimeRange.startDate"
+      <datetime-select
+        v-model="startDate"
         :label="startDateLabel"
         :display-format="displayFormat"
         :type="type"
-        :is-link="false"
+        :is-link="isLink"
         :rules="rules"
+        :readonly="readonly"
         :value-format="valueFormat"
         :min-date="rangeMinDate"
         :max-date="maxDate"
         :placeholder="startDatePlaceholder"
         :right-icon="rightIcon"
-        @change="change"
+        @confirm="onConfirm"
       />
     </div>
     <slot
@@ -25,49 +26,49 @@
       </span>
     </slot>
     <div class="datetime-range-select">
-      <date-select
-        v-model="datetimeRange.endDate"
+      <datetime-select
+        v-model="endDate"
         :label="endDateLabel"
         :display-format="displayFormat"
         :placeholder="endDatePlaceholder"
         :value-format="valueFormat"
         :type="type"
+        :readonly="readonly"
         :min-date="minDate"
         :max-date="rangeMaxDate"
         :rules="rules"
-        :is-link="false"
+        :is-link="isLink"
         :right-icon="rightIcon"
-        @change="change"
+        @confirm="onConfirm"
       />
     </div>
   </div>
 </template>
 
 <script>
-import DatetSelect from '../datetime-select';
-import clone from '../utils/clone';
+import DatettimeSelect from '../datetime-select';
 import dayjs from 'dayjs';
 
 export default {
   name: 'datetime-range',
   components: {
-    [DatetSelect.name]: DatetSelect,
+    [DatettimeSelect.name]: DatettimeSelect,
   },
   props: {
     // 时间区间
     value: {
-      type: Object,
+      type: Array,
       required: true,
     },
     // 开始时间的label
     startDateLabel: {
       type: String,
-      default: '',
+      default: '开始时间',
     },
     // 结束时间的label
     endDateLabel: {
       type: String,
-      default: '',
+      default: '结束时间',
     },
     // 选中的日期时间数值的格式
     valueFormat: {
@@ -89,6 +90,10 @@ export default {
       type: String,
       default: 'YYYY-MM-DD',
     },
+    isLink: {
+      type: Boolean,
+      default: true,
+    },
     // 时间类型
     type: {
       type: String,
@@ -102,7 +107,6 @@ export default {
     // 是否显示分隔符
     separatorShow: {
       type: Boolean,
-      default: true,
     },
     // 分隔符
     separator: {
@@ -122,22 +126,23 @@ export default {
       type: Date,
       default: () => dayjs().add(10, 'year').toDate(),
     },
+    readonly: {
+      type: Boolean,
+    },
   },
   data() {
     return {
-      datetimeRange: {
-        startDate: '',
-        endDate: '',
-      }
+      startDate: '',
+      endDate: '',
     };
   },
   computed: {
     minDate() {
-      const startTime = this.datetimeRange.startDate || dayjs();
+      const startTime = this.startDate || dayjs();
       return dayjs(startTime).toDate();
     },
     maxDate() {
-      const endTime = this.datetimeRange.endDate || dayjs().add(10, 'year');
+      const endTime = this.endDate || dayjs().add(10, 'year');
       return dayjs(endTime).toDate();
     },
   },
@@ -145,46 +150,18 @@ export default {
     value: {
       deep: true,
       handler(newValue) {
-        this.datetimeRange = clone(newValue);
+        this.startDate = newValue[0];
+        this.endDate = newValue[1];
       },
     },
   },
   methods: {
     // 更新时间
-    change() {
-      this.$emit('input', clone(this.datetimeRange));
+    onConfirm() {
+      console.log('gxw ', [this.startDate, this.endDate])
+      this.$emit('input', [this.startDate, this.endDate]);
     }
   },
 };
 </script>
 
-<style lang="less" scoped>
-.datetime-range {
-  display: flex;
-  font-size: 12px;
-  .datetime-range-select  {
-    width: 120px;
-  }
-  /deep/ .van-cell {
-    padding: 0;
-    flex-direction:column;
-  }
-  /deep/ .van-field__label {
-    color: #999;
-  }
-  /deep/ .van-field__value {
-    padding: 0 12px;
-    color: #666;
-    font-size: 12px;
-    line-height: 30px;
-    text-align: center;
-    border-radius: 5px;
-    background: #eff0f4;
-  }
-  .separator-wrap {
-    margin: 0 16px;
-    display: flex;
-    align-items: center;
-  }
-}
-</style>
