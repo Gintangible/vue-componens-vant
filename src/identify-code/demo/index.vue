@@ -1,8 +1,8 @@
 <template>
   <div>
-    <identify :identify-code="identifyCode" :width="200"/>
-    <identify />
-    <identify :identify-code="['ab', 'b', 'c']"/>
+    <identify-code :identify-code="identifyCode" :width="200"/>
+    <identify-code />
+    <identify-code :identify-code="['ab', 'b', 'c']"/>
     <van-field
       v-model="identifyCode"
       label="输入的值"
@@ -12,7 +12,7 @@
 </template>
 <script>
 import { Field } from 'vant';
-import Identify from '../index';
+import IdentifyCode from '../index';
 
 /**
  * {@link identify}的使用例子。
@@ -23,7 +23,7 @@ export default {
   name: 'identify-demo',
   components: {
     [Field.name]: Field,
-    [Identify.name]: Identify,
+    [IdentifyCode.name]: IdentifyCode,
   },
   data() {
     return {

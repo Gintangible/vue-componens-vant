@@ -30,6 +30,14 @@ module.exports = {
         title: '基础组件',
         items: [
           {
+            path: 'switch-cell',
+            title: '组合Cell和Switch的开关控件',
+          },
+          {
+            path: 'enum-select',
+            title: '枚举控件',
+          },
+          {
             path: 'name-field',
             title: '姓名输入框控件',
           },
@@ -38,8 +46,20 @@ module.exports = {
             title: '手机号码输入框控件',
           },
           {
-            path: 'enum-select',
-            title: '枚举控件',
+            path: 'id-card-field',
+            title: '身份证输入框控件',
+          },
+          // {
+          //   path: 'credential-field',
+          //   title: '证件输入框控件',
+          // },
+          {
+            path: 'verify-code-field',
+            title: '短信验证码输入框控件',
+          },
+          {
+            path: 'identify-code',
+            title: '验证码控件',
           },
           {
             path: 'datetime-select',
@@ -48,10 +68,6 @@ module.exports = {
           {
             path: 'datetime-range',
             title: '日期区间控件',
-          },
-          {
-            path: 'switch-cell',
-            title: '组合Cell和Switch的开关控件',
           },
         ],
       },
@@ -68,10 +84,6 @@ module.exports = {
           {
             path: 'faq-list',
             title: '产品常见问题列表控件',
-          },
-          {
-            path: 'identify',
-            title: '验证码控件',
           },
           {
             path: 'signature',

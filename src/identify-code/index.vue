@@ -12,7 +12,7 @@
 <script>
 
 export default {
-  name: 'identify',
+  name: 'identify-code',
   props: {
     identifyCode: {
       type: [String, Array],
