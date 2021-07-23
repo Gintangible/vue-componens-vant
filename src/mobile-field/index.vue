@@ -1,14 +1,14 @@
 <template>
-  <div class="name-field van-cell">
+  <div class="mobile-field van-cell">
     <van-field
-      v-model="name"
+      v-model="mobile"
       clearable
       :readonly="readonly"
       :label="label"
       :required="required"
       :placeholder="placeholder"
       :formatter="formatter"
-      :rules="nameRules"
+      :rules="mobileRules"
       @click="onClick"
       @input="onChange"
       @blur="onBlur"
@@ -20,12 +20,12 @@
 import { Field, Toast } from 'vant';
 import removemidspace from '../utils/removemidspace';
 import stringTrim from '../utils/stringTrim';
-import isCnName from '../utils/isCnName';
+import isMobile from '../utils/isMobile';
 
-// 姓名输入框控件。
+// 手机号码输入框控件。
 
 export default {
-  name: 'name-field',
+  name: 'mobile-field',
   components: {
     [Field.name]: Field,
   },
@@ -39,11 +39,11 @@ export default {
     },
     label: {                          // 姓名输入框标签
       type: String,
-      default: '姓　　名',
+      default: '手机号码',
     },
     placeholder: {                    // 姓名输入框提示文字
       type: String,
-      default: '请填写姓名',
+      default: '请填写手机号码',
     },
     readonly: {                       // 输入框中的信息是否只读
       type: Boolean,
@@ -56,28 +56,28 @@ export default {
       type: Function,
       default: (value) => {
         return stringTrim(value);
-      },
+      }
     },
     rules: {
       type: Array,
       default: () => [],
-    }
+    },
   },
   data() {
     return {
-      name: '',                       // 当前姓名
+      mobile: '',                       // 当前姓名
     };
   },
   computed: {
-    nameRules() {
+    mobileRules() {
       let rules = [];
       if (this.required) {
         rules = [{
           required: this.required,
-          message: '请输入正确的姓名',
+          message: '请输入正确的手机号码',
           validator: (value) => {
-            return isCnName(value);
-          }
+            return isMobile(value);
+          },
         }];
       }
       return rules.concat(this.rules);
@@ -85,11 +85,11 @@ export default {
   },
   watch: {
     value(newValue) {
-      this.name = newValue;
+      this.mobile = newValue;
     },
   },
   created() {
-    this.name = this.value;
+    this.mobile = this.value;
   },
   methods: {
     // 用户点击输入框后触发此事件。
@@ -104,23 +104,22 @@ export default {
       // 触发 clear-error 事件
       this.$emit('clear-error');
       // 触发 input 事件
-      this.$emit('input', this.name);
-      this.$emit('change', this.name);
+      this.$emit('input', this.mobile);
     },
 
     // 当输入框失去输入焦点时触发此事件。
     onBlur() {
       if (!this.readonly) {
-        this.$emit('input', this.name);
-        // 触发 blur 事件
-        this.$emit('blur', this.name);
+        this.$emit('input', this.mobile);
+        // 触发 change 事件
+        this.$emit('blur', this.mobile);
       }
     },
   },
 };
 </script>
 <style scoped lang="less">
-.name-field {
+.mobile-field {
   display: block;
   padding: 0;
 }

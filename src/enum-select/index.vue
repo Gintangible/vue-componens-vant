@@ -52,6 +52,7 @@ export default {
   },
   props: {
     value: {              // 当前选中的选项的数值
+      type: null,
       required: true,
     },
     columns: {            // 同vant-picker columns

@@ -21,9 +21,9 @@ export default function clone(obj, hash = new WeakMap()) {
       tempobj = Array.isArray(obj) ? [] : {};
       hash.set(obj, tempobj);
   }
-  for (const key in obj) {
+  Object.keys(obj).forEach(key => {
     tempobj[key] = typeof obj[key] === 'object' ? clone((obj[key]), hash) : obj[key];
-  }
+  })
 
   return tempobj;
 }

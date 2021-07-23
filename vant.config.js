@@ -34,6 +34,10 @@ module.exports = {
             title: '姓名输入框控件',
           },
           {
+            path: 'mobile-field',
+            title: '手机号码输入框控件',
+          },
+          {
             path: 'enum-select',
             title: '枚举控件',
           },

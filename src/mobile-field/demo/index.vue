@@ -1,7 +1,7 @@
 <template>
   <van-form>
-    <name-field
-      v-model="name"
+    <mobile-field
+      v-model="mobile"
       :readonly="readonly"
       :required="required"
       :rules="rules"
@@ -22,7 +22,7 @@
       title="是否rules覆盖"
     />
     <van-field
-      v-model="name"
+      v-model="mobile"
       label="输入的值"
       clearable
     />
@@ -42,30 +42,26 @@ import {
   Form, Field, List, Cell,
 } from 'vant';
 import SwitchCell from '../../switch-cell';
-import NameField from '../index';
+import MobileField from '../index';
 
-/**
- * {@link NameField}的使用例子。
- *
- * @author gintangible
- */
+// {@link MobileField}的使用例子。
 export default {
-  name: 'name-field-demo',
+  name: 'mobile-field-demo',
   components: {
     [Form.name]: Form,
     [Field.name]: Field,
     [List.name]: List,
     [Cell.name]: Cell,
     [SwitchCell.name]: SwitchCell,
-    [NameField.name]: NameField,
+    [MobileField.name]: MobileField,
   },
   data() {
     return {
-      name: '',
+      mobile: '',
       readonly: false,
-      required: false,
       count: 0,
       events: [],
+      required: false,
       outRules: false,
     };
   },
@@ -76,10 +72,10 @@ export default {
       }
       return [{
         required: true,
-        message: '测试传入rules，值为test',
+        message: '测试传入rules，值为123',
         trigger: 'onBlur',
         validator: (value) => {
-          return value === 'test';
+          return value === '123';
         }
       }];
     }

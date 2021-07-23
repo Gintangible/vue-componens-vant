@@ -58,6 +58,7 @@ export default {
   },
   props: {
     value: {              // 当前选中的日期时间的数值，注意为了支持null此参数不限制类型
+      type: null,
       required: true,
     },
     type: {               // 选择类型
