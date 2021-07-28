@@ -38,9 +38,7 @@
   </van-form>
 </template>
 <script>
-import {
-  Form, Field, List, Cell,
-} from 'vant';
+import { Form, Field, List, Cell } from 'vant';
 import SwitchCell from '../../switch-cell';
 import IdCardField from '../index';
 
@@ -74,25 +72,39 @@ export default {
       if (!this.outRules) {
         return [];
       }
-      return [{
-        required: true,
-        message: '测试传入rules，值为12345',
-        trigger: 'onBlur',
-        validator: (value) => {
-          return value === '12345';
-        }
-      }];
-    }
+      return [
+        {
+          required: true,
+          message: '测试传入rules，值为12345',
+          trigger: 'onBlur',
+          validator: (value) => {
+            return value === '12345';
+          },
+        },
+      ];
+    },
   },
   methods: {
     onBlur(value) {
-      this.events.unshift({ order: ++this.count, name: 'blur', param: value });
+      this.events.unshift({
+        order: ++this.count,
+        name: 'blur',
+        param: value,
+      });
     },
     onClearError() {
-      this.events.unshift({ order: ++this.count, name: 'clear-error', param: '' });
+      this.events.unshift({
+        order: ++this.count,
+        name: 'clear-error',
+        param: '',
+      });
     },
     onError(value) {
-      this.events.unshift({ order: ++this.count, name: 'error', param: value });
+      this.events.unshift({
+        order: ++this.count,
+        name: 'error',
+        param: value,
+      });
     },
   },
 };

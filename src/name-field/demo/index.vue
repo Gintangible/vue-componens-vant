@@ -38,9 +38,7 @@
   </van-form>
 </template>
 <script>
-import {
-  Form, Field, List, Cell,
-} from 'vant';
+import { Form, Field, List, Cell } from 'vant';
 import SwitchCell from '../../switch-cell';
 import NameField from '../index';
 
@@ -74,25 +72,35 @@ export default {
       if (!this.outRules) {
         return [];
       }
-      return [{
-        required: true,
-        message: '测试传入rules，值为test',
-        trigger: 'onBlur',
-        validator: (value) => {
-          return value === 'test';
-        }
-      }];
-    }
+      return [
+        {
+          required: true,
+          message: '测试传入rules，值为test',
+          trigger: 'onBlur',
+          validator: (value) => {
+            return value === 'test';
+          },
+        },
+      ];
+    },
   },
   methods: {
     onBlur(value) {
       this.events.unshift({ order: ++this.count, name: 'blur', param: value });
     },
     onClearError() {
-      this.events.unshift({ order: ++this.count, name: 'clear-error', param: '' });
+      this.events.unshift({
+        order: ++this.count,
+        name: 'clear-error',
+        param: '',
+      });
     },
     onError(value) {
-      this.events.unshift({ order: ++this.count, name: 'error', param: value });
+      this.events.unshift({
+        order: ++this.count,
+        name: 'error',
+        param: value,
+      });
     },
   },
 };

@@ -59,9 +59,7 @@
 </template>
 
 <script>
-import {
-  Form, Field, List, Cell,
-} from 'vant';
+import { Form, Field, List, Cell } from 'vant';
 import VerifyCodeField from '../index';
 
 /**
@@ -91,10 +89,18 @@ export default {
   },
   methods: {
     onChange(value) {
-      this.events.unshift({ order: ++this.count, name: 'change', param: value });
+      this.events.unshift({
+        order: ++this.count,
+        name: 'change',
+        param: value,
+      });
     },
     onSend() {
-      this.events.unshift({ order: ++this.count, name: 'send', param: '' });
+      this.events.unshift({
+        order: ++this.count,
+        name: 'send',
+        param: '',
+      });
     },
   },
 };

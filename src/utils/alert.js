@@ -1,12 +1,6 @@
 import { Dialog } from 'vant';
 
- /**
-  * 显示弹出式对话框的对象。
-  *
-  * @author 胡海星
-  */
  const alert = {
-
    /**
     * 表示此对象的功能是否启用。
     */

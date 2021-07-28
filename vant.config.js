@@ -34,6 +34,10 @@ module.exports = {
             title: '组合Cell和Switch的开关控件',
           },
           {
+            path: 'panel',
+            title: 'panel面板',
+          },
+          {
             path: 'enum-select',
             title: '枚举控件',
           },

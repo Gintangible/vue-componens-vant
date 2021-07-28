@@ -54,7 +54,8 @@ const CREDENTIAL_TYPES = [
   {
     name: '中国人民武装警察警官证',
     value: 'POLICE_CARD',
-  }]
+  },
+];
 
 //  EnumSelect 的使用例子。
 export default {
@@ -73,20 +74,30 @@ export default {
       readonly: false,
       count: 0,
       events: [],
-      rules: [{
-        required: true,
-        message: '选择身份证外提示错误',
-        trigger: 'onChange',
-        validator: (val) => val === '身份证',
-      }],
+      rules: [
+        {
+          required: true,
+          message: '选择身份证外提示错误',
+          trigger: 'onChange',
+          validator: (val) => val === '身份证',
+        },
+      ],
     };
   },
   methods: {
     onConfirm(value) {
-      this.events.unshift({ order: ++this.count, name: 'confirm', param: value });
+      this.events.unshift({
+        order: ++this.count,
+        name: 'confirm',
+        param: value,
+      });
     },
     onChange(value) {
-      this.events.unshift({ order: ++this.count, name: 'change', param: value });
+      this.events.unshift({
+        order: ++this.count,
+        name: 'change',
+        param: value,
+      });
     },
   },
 };
