@@ -4,6 +4,12 @@
       {{ title }}
     </div>
     <div
+      v-if="tipText"
+      class="signature-tips"
+    >
+      {{ tipText }}
+    </div>
+    <div
       class="signature-content"
       :style="canvasStyle"
     >
@@ -25,7 +31,7 @@
     <div
       v-if="!readonly"
       class="signature-btn-group"
-      >
+    >
       <van-button
         :text="clearText"
         size="small"
@@ -52,7 +58,7 @@ import SignaturePad from 'signature_pad';
 import alert from '../utils/alert';
 
 export default {
-  name: 'signature',
+  name: 'Signature',
   components: {
     [Button.name]: Button,
     [VanImage.name]: VanImage,
@@ -85,6 +91,11 @@ export default {
     confirmText: {
       type: String,
       default: '确定'
+    },
+    // 提示文字
+    tipText: {
+      type: String,
+      default: ''
     },
   },
   data() {
@@ -119,7 +130,7 @@ export default {
         return;
       }
       if (this.signaturePad.isEmpty()) {
-        alert.show('提示', '请先完成签名');
+        alert.show('提示', '签名不能为空');
         return;
       }
       const IMAGE_URL = this.signaturePad.toDataURL();
@@ -148,7 +159,13 @@ export default {
 
 .signature-title {
   font-size: 16px;
-  line-height: 30px;
+  line-height: 28px;
+}
+
+.signature-tips {
+  font-size: 14px;
+  color: #f00;
+  line-height: 24px;
 }
 
 .signature-content {
@@ -171,7 +188,7 @@ export default {
 }
 
 .signature-btn-group {
-  margin-top: 20px;
+  margin-top: 12px;
   display: flex;
   justify-content: center;
   .van-button {
