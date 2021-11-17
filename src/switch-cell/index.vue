@@ -18,21 +18,7 @@
 <script>
 import { Cell, Switch } from 'vant';
 
-/**
- * 一个简单的组合{@link Cell}和{@link Switch}的控件。
- *
- * @property {Boolean} value
- *     以{@code v-mode}双向绑定的开关取值。
- * @property {String} title
- *     可选，该控件的标题。默认值为空字符串。
- * @property {String} label
- *     可选，该控件标题下方的描述信息。默认值为空字符串。
- * @property {Boolean} readonly
- *     可选，表示输入框中的信息是否只读。默认值为{@code false}。
- * @event {String} change
- *     当开关值被用户改变时，会触发此事件，并将新的开关值作为事件参数传递。
- * @author gintangible
- */
+// 一个简单的组合{@link Cell}和{@link Switch}的控件示例
 export default {
   name: 'switch-cell',
   components: {

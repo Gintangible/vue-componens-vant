@@ -39,7 +39,7 @@ import {
   Field, DatetimePicker, Popup, Toast,
 } from 'vant';
 import dayjs from 'dayjs';
-import removemidspace from '../utils/removemidspace'
+import { stringRemoveSpace } from '@gintangible/common-utils'
 
 /**
  * Vant的{@link DatetimePicker}组件的时间格式。
@@ -155,7 +155,7 @@ export default {
     // 用户点击选项输入框后触发此事件。
     onClick() {
       if (this.readonly) {
-        Toast(`${removemidspace(this.label)}不可更改`);
+        Toast(`${stringRemoveSpace(this.label)}不可更改`);
         return;
       }
       this.showPicker = true;

@@ -4,6 +4,7 @@ yarn.lock
 # npm
 node_modules
 package-lock.json
+yarn-error.log
 
 # dist file
 es

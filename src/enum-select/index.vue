@@ -40,7 +40,7 @@
 import {
   Field, Picker, Popup, Toast,
 } from 'vant';
-import removemidspace from '../utils/removemidspace'
+import { stringRemoveSpace } from '@gintangible/common-utils'
 
 // 枚举类型下拉选择框。
 export default {
@@ -109,7 +109,7 @@ export default {
     // 用户点击选项输入框后触发此事件。
     onClick() {
       if (this.readonly) {
-        Toast(`${removemidspace(this.label)}不可更改`);
+        Toast(`${stringRemoveSpace(this.label)}不可更改`);
         return;
       }
       this.showPicker = true;
@@ -119,12 +119,12 @@ export default {
     onConfirm(item) {
       this.showPicker = false;
       this.$emit('input', item.value);
-      this.$emit('confirm', item.value);
+      this.$emit('confirm', item);
     },
 
     // 修改选项下拉框选项后触发的事件。
     onChange(picker, item) {
-      this.$emit('change', item.value);
+      this.$emit('change', item);
     },
 
     // 更新UI界面。

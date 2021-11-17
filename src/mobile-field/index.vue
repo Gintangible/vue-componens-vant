@@ -18,9 +18,7 @@
 
 <script>
 import { Field, Toast } from 'vant';
-import removemidspace from '../utils/removemidspace';
-import stringTrim from '../utils/stringTrim';
-import isMobile from '../utils/isMobile';
+import { stringRemoveSpace, isMobile } from '@gintangible/common-utils';
 
 // 手机号码输入框控件。
 
@@ -55,7 +53,7 @@ export default {
     formatter: {
       type: Function,
       default: (value) => {
-        return stringTrim(value);
+        return value.trim();
       }
     },
     rules: {
@@ -76,6 +74,7 @@ export default {
           required: this.required,
           message: '请输入正确的手机号码',
           validator: (value) => {
+            console.log('gxw get ', isMobile);
             return isMobile(value);
           },
         }];
@@ -95,7 +94,7 @@ export default {
     // 用户点击输入框后触发此事件。
     onClick() {
       if (this.readonly) {
-        Toast(`${removemidspace(this.label)}不可更改`);
+        Toast(`${stringRemoveSpace(this.label)}不可更改`);
       }
     },
 

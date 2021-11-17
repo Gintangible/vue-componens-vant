@@ -14,11 +14,7 @@
 import { Field } from 'vant';
 import IdentifyCode from '../index';
 
-/**
- * {@link identify}的使用例子。
- *
- * @author gintangible
- */
+// identify 的使用例子。
 export default {
   name: 'identify-demo',
   components: {

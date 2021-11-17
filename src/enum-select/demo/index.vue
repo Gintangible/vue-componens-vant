@@ -25,7 +25,7 @@
         v-for="(e, i) in events"
         :key="i"
         :title="e.order + ': ' + e.name"
-        :value="e.param"
+        :value="e.param.value"
       />
     </van-list>
   </div>
@@ -85,18 +85,18 @@ export default {
     };
   },
   methods: {
-    onConfirm(value) {
+    onConfirm(item) {
       this.events.unshift({
         order: ++this.count,
         name: 'confirm',
-        param: value,
+        param: item,
       });
     },
-    onChange(value) {
+    onChange(item) {
       this.events.unshift({
         order: ++this.count,
         name: 'change',
-        param: value,
+        param: item,
       });
     },
   },

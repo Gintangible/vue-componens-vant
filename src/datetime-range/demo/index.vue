@@ -32,11 +32,7 @@ import { Form, Field, Cell } from 'vant';
 import SwitchCell from '../../switch-cell';
 import DatetimeRange from '../index';
 
-/**
- * {@link DateSelect}的使用例子。
- *
- * @author gintangible
- */
+// DateSelect 组件示例
 export default {
   name: 'date-select-demo',
   components: {

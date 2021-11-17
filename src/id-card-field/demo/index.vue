@@ -42,11 +42,7 @@ import { Form, Field, List, Cell } from 'vant';
 import SwitchCell from '../../switch-cell';
 import IdCardField from '../index';
 
-/**
- * {@link NameField}的使用例子。
- *
- * @author gintangible
- */
+// NameField 的使用例子。
 export default {
   name: 'id-card-field-demo',
   components: {

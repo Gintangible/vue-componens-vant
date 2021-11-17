@@ -18,9 +18,7 @@
 
 <script>
 import { Field, Toast } from 'vant';
-import removemidspace from '../utils/removemidspace';
-import stringTrim from '../utils/stringTrim';
-import isCnName from '../utils/isCnName';
+import { stringRemoveSpace, isCnName }from '@gintangible/common-utils';
 
 // 姓名输入框控件。
 
@@ -55,7 +53,7 @@ export default {
     formatter: {
       type: Function,
       default: (value) => {
-        return stringTrim(value);
+        return value.trim();
       },
     },
     rules: {
@@ -95,7 +93,7 @@ export default {
     // 用户点击输入框后触发此事件。
     onClick() {
       if (this.readonly) {
-        Toast(`${removemidspace(this.label)}不可更改`);
+        Toast(`${stringRemoveSpace(this.label)}不可更改`);
       }
     },
 

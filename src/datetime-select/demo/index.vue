@@ -114,11 +114,7 @@ import dayjs from 'dayjs';
 import SwitchCell from '../../switch-cell';
 import DatetimeSelect from '../index';
 
-/**
- * {@link DateSelect}的使用例子。
- *
- * @author gintangible
- */
+// DateSelect 组件示例。
 export default {
   name: 'date-select-demo',
   components: {

@@ -44,11 +44,7 @@ import {
 } from 'vant';
 import SwitchCell from '../index';
 
-/**
- * {@link SwitchCell}的使用例子。
- *
- * @author gintangible
- */
+// SwitchCell 组件示例。
 export default {
   name: 'switch-cell-demo',
   components: {

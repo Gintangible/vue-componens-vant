@@ -37,11 +37,7 @@ import {
 import SwitchCell from '../../switch-cell';
 import Signature from '../index';
 
-/**
- * {@link NameField}的使用例子。
- *
- * @author gintangible
- */
+// signature组件示例。
 export default {
   name: 'signature-demo',
   components: {
