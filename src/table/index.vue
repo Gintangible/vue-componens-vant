@@ -6,7 +6,10 @@
       :class="['vant-table-content', border ? 'table-border' : '']"
     >
       <colgroup>
-        <col v-if="showIndex">
+        <col
+          v-if="showIndex"
+          width="24px"
+        >
         <col
           v-for="(item, index) in tableHeader"
           :key="index"
@@ -105,9 +108,7 @@ export default {
     },
 
     // 斑马条纹
-    stripe: {
-      type: Boolean,
-    },
+    stripe: Boolean,
 
     // 没有数据时
     emptyText: {
@@ -117,7 +118,7 @@ export default {
   },
   data() {
     return {
-      colWidth: '60px',
+      colWidth: '30px',
     };
   },
   mounted() {
@@ -127,10 +128,11 @@ export default {
     setColWidth() {
       const { offsetWidth } = this.$refs.table;
       let fixWidth = 0;
-      this.data.forEach((item) => {
-        fixWidth += +item.width;
+      const len = this.showIndex ? this.tableHeader.length + 1 : this.tableHeader.length;
+      this.tableHeader.forEach((item) => {
+        fixWidth += parseInt(item.width || 0, 10);
       });
-      this.colWidth = `${Math.round((offsetWidth - fixWidth) / this.data.length)}px`;
+      this.colWidth = `${Math.round((offsetWidth - fixWidth) / len)}px`;
     }
   },
 };

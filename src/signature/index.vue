@@ -28,6 +28,9 @@
         />
       </div>
     </div>
+    <div class="signature-hint">
+      请使用正楷清晰地写上个人签名
+    </div>
     <div
       v-if="!readonly"
       class="signature-btn-group"
@@ -38,7 +41,7 @@
         round
         plain
         color="#007bf6"
-        @click="clear"
+        @click="handleRemove"
       />
       <van-button
         :text="confirmText"
@@ -64,6 +67,11 @@ export default {
     [VanImage.name]: VanImage,
   },
   props: {
+    name: {
+      type: String,
+      default: '',
+    },
+
     // 签名的title
     title: {
       type: String,
@@ -97,6 +105,9 @@ export default {
       type: String,
       default: ''
     },
+
+    // eslint-disable-next-line
+    beforeRemove: Function,
   },
   data() {
     return {
@@ -117,10 +128,21 @@ export default {
   },
   methods: {
     // 清空签名
+    handleRemove() {
+      const beforeRemove = this.beforeRemove(this.name);
+      if (beforeRemove && beforeRemove.then) {
+        beforeRemove.then(() => {
+          this.clear();
+        });
+      } else {
+        this.clear();
+      }
+    },
+
     clear() {
       this.signSrc = '';
       this.signaturePad.clear();
-      this.$emit('clear');
+      this.$emit('clear', this.name);
     },
 
     // 完成签名
@@ -134,7 +156,7 @@ export default {
         return;
       }
       const IMAGE_URL = this.signaturePad.toDataURL();
-      this.$emit('confirm', IMAGE_URL);
+      this.$emit('confirm', IMAGE_URL, this.name);
     },
 
     // 画布区域自适应
@@ -185,6 +207,13 @@ export default {
     width: 100%;
     height: 100%;
   }
+}
+
+.signature-hint {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
 }
 
 .signature-btn-group {
