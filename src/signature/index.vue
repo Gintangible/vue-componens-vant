@@ -37,7 +37,7 @@
     >
       <van-button
         :text="clearText"
-        size="small"
+        size="mini"
         round
         plain
         color="#007bf6"
@@ -46,7 +46,7 @@
       <van-button
         :text="confirmText"
         round
-        size="small"
+        size="mini"
         color="#007bf6"
         @click="confirm"
       />
@@ -62,10 +62,12 @@ import alert from '../utils/alert';
 
 export default {
   name: 'Signature',
+
   components: {
     [Button.name]: Button,
     [VanImage.name]: VanImage,
   },
+
   props: {
     name: {
       type: String,
@@ -82,13 +84,15 @@ export default {
       type: String,
       default: '',
     },
-    readonly: {
-      type: Boolean,
+    readonly: Boolean,
+    height: {
+      type: [String, Number],
+      default: '150',
     },
     // 签名板背景色
     background: {
       type: String,
-      default: '#fff',
+      default: '#dedede',
     },
     // 清屏的文字内容
     clearText: {
@@ -117,8 +121,16 @@ export default {
   },
   computed: {
     canvasStyle() {
-      return `width: ${this.width}; height: ${this.height}px; background: ${this.background};`;
+      return `height: ${this.height}px; background: ${this.background};`;
     },
+  },
+
+  watch: {
+    signUrl(val) {
+      if (val) {
+        this.signSrc = val;
+      }
+    }
   },
   mounted() {
     const { canvas } = this.$refs;
@@ -129,13 +141,14 @@ export default {
   methods: {
     // 清空签名
     handleRemove() {
+      if (!this.beforeRemove) {
+        return this.clear();
+      }
       const beforeRemove = this.beforeRemove(this.name);
       if (beforeRemove && beforeRemove.then) {
         beforeRemove.then(() => {
           this.clear();
         });
-      } else {
-        this.clear();
       }
     },
 
@@ -173,7 +186,7 @@ export default {
 
 <style lang="less" scoped>
 .signature-container {
-  padding: 12px;
+  padding: 10px;
   border: 1px solid #e8e8e8;
   border-radius: 4px;
   background-color: #fff;
@@ -181,13 +194,13 @@ export default {
 
 .signature-title {
   font-size: 16px;
-  line-height: 28px;
+  line-height: 24px;
 }
 
 .signature-tips {
-  font-size: 14px;
+  font-size: 12px;
   color: #f00;
-  line-height: 24px;
+  line-height: 20px;
 }
 
 .signature-content {
@@ -211,20 +224,20 @@ export default {
 
 .signature-hint {
   margin-top: 6px;
-  font-size: 14px;
+  font-size: 12px;
   color: #666;
   text-align: center;
 }
 
 .signature-btn-group {
-  margin-top: 12px;
+  margin-top: 10px;
   display: flex;
   justify-content: center;
   .van-button {
-    padding: 0 30px;
+    padding: 0 16px;
   }
   .van-button + .van-button {
-    margin-left: 40px;
+    margin-left: 30px;
   }
 }
 </style>
