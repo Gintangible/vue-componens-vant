@@ -4,7 +4,7 @@
       :required="required"
       :value="text"
       :label="label"
-      :placeholder="placeholder"
+      :placeholder="placeholder || `请选择${label}`"
       readonly
       :is-link="isLink"
       :input-align="inputAlign"
@@ -35,11 +35,10 @@
   </div>
 </template>
 <script>
+import dayjs from 'dayjs';
 import {
   Field, DatetimePicker, Popup, Toast,
 } from 'vant';
-import dayjs from 'dayjs';
-import { stringRemoveSpace } from '@gintangible/common-utils'
 
 /**
  * Vant的{@link DatetimePicker}组件的时间格式。
@@ -47,7 +46,7 @@ import { stringRemoveSpace } from '@gintangible/common-utils'
 
 // 枚举类型下拉选择框。
 export default {
-  name: 'datetime-select',
+  name: 'DatetimeSelect',
   components: {
     [Field.name]: Field,
     [DatetimePicker.name]: DatetimePicker,
@@ -61,77 +60,69 @@ export default {
       type: null,
       required: true,
     },
+
+    readonly: Boolean,
+    // 见 vant field https://vant-contrib.gitee.io/vant/v2/#/zh-CN/datetime-picker
     type: {               // 选择类型
       type: String,
       default: 'datetime',
     },
-    required: {           // 见 vant field组件 required
-      type: Boolean,
-      default: false,
-    },
-    isLink: {             // 见 vant field组件 is-link
-      type: Boolean,
-      default: true,
-    },
-    rules: {              // 见 vant field组件 rules
+    required: Boolean,
+    isLink: Boolean,
+    rules: {
       type: Array,
     },
-    inputAlign: {         // 见 vant field组件 input-align
+    inputAlign: {
       type: String,
       default: '',
     },
     // 右侧图片
-    rightIcon: {          // 见 van-field right-icon
+    rightIcon: {
       type: String,
       default: '',
     },
-    valueFormat: {        // 选中的日期时间数值的格式
+    valueFormat: {
       type: String,
       default: 'YYYY-MM-DDTHH:mmZ',
     },
-    displayFormat: {      // 选中的日期时间在选择框中显示的格式
+    displayFormat: {
       type: String,
       default: 'YYYY年MM月DD日HH时mm分',
     },
-    label: {              // 日期时间选择框标签
+    label: {
       type: String,
       default: '日期时间',
     },
-    placeholder: {        // 日期时间选择框提示文字
+    placeholder: {
       type: String,
-      default: '请选择日期时间',
     },
-    minDate: {            // 可选的最小日期时间
+    minDate: {
       type: Date,
       default: () => dayjs().subtract(10, 'year').toDate(),
     },
-    maxDate: {            // 可选的最大日期时间
+    maxDate: {
       type: Date,
       default: () => dayjs().add(10, 'year').toDate(),
     },
-    minHour: {            // 可选的最小小时数
+    minHour: {
       type: Number,
       default: 0,
     },
-    maxHour: {            // 可选的最大小时数
+    maxHour: {
       type: Number,
       default: 23,
     },
-    minMinute: {          // 可选的最小分钟数
+    minMinute: {
       type: Number,
       default: 0,
     },
-    maxMinute: {          // 可选的最大分钟数
+    maxMinute: {
       type: Number,
       default: 59,
     },
     defaultSelected: {    // 默认选中的日期时间
       type: String,
       default: '',
-    },
-    readonly: {           // 选项框中选择的日期时间是否不可更改
-      type: Boolean,
-      default: false,
     },
   },
   data() {
@@ -155,7 +146,7 @@ export default {
     // 用户点击选项输入框后触发此事件。
     onClick() {
       if (this.readonly) {
-        Toast(`${stringRemoveSpace(this.label)}不可更改`);
+        Toast(`${this.label}不可更改`);
         return;
       }
       this.showPicker = true;
@@ -209,11 +200,11 @@ export default {
           this.selected = null;
         }
       } else {
-        const time = dayjs(newValue, this.valueFormat);
         if (this.type === 'time') {
           this.selected = newValue;
           this.text = this.formatTimeText(newValue);
         } else {
+        const time = dayjs(newValue, this.valueFormat);
           this.selected = time.toDate();
           this.text = time.format(this.displayFormat);
         }

@@ -18,7 +18,6 @@
 
 <script>
 import { Field, Toast } from 'vant';
-import { stringRemoveSpace, isCnName }from '@gintangible/common-utils';
 
 // 姓名输入框控件。
 
@@ -93,7 +92,7 @@ export default {
     // 用户点击输入框后触发此事件。
     onClick() {
       if (this.readonly) {
-        Toast(`${stringRemoveSpace(this.label)}不可更改`);
+        Toast(`${this.label}不可更改`);
       }
     },
 
