@@ -38,8 +38,8 @@ module.exports = {
             title: '输入框控件',
           },
           {
-            path: 'panel',
-            title: 'panel面板',
+            path: 'panel-form',
+            title: 'panel-form面板',
           },
           {
             path: 'enum-select',
@@ -52,10 +52,6 @@ module.exports = {
           // {
           //   path: 'id-card-field',
           //   title: '身份证输入框控件',
-          // },
-          // {
-          //   path: 'credential-field',
-          //   title: '证件输入框控件',
           // },
           {
             path: 'verify-code-field',

@@ -9,6 +9,8 @@ import FaqList from './src/faq-list';
 
 // import Identify from './src/identify';
 
+import PanelForm from 'panel-form';
+
 import Signature from './src/signature';
 import SwitchCell from './src/switch-cell';
 
@@ -25,6 +27,8 @@ export {
   FaqList,
 
   // Identify,
+
+  PanelForm,
 
   Signature,
   SwitchCell,
