@@ -51,6 +51,7 @@ export default {
     },
     // 字符串是否转大写
     upperCase: Boolean,
+    // 是否移除lable中间的空格，placeholder 与 只读点击时有效
     removeSpace: {
       type: Boolean,
       default: true,

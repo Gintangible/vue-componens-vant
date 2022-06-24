@@ -1,7 +1,7 @@
 <template>
   <div>
     <van-cell
-      title="常见问题"
+      :title="title"
       title-class="title-class"
     />
     <van-collapse
@@ -12,11 +12,11 @@
       <template v-for="(item, i) in list.slice(0, showLength)">
         <van-collapse-item
           :key="i"
-          :title="item.problem"
+          :title="item[qKey]"
           :name="i"
           icon="question-o"
         >
-          <div v-html="item.answer"></div>
+          <div v-html="item[aKey]" />
         </van-collapse-item>
       </template>
       <van-cell
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { Collapse, CollapseItem, Cell } from 'vant';
+import { Collapse, CollapseItem, Cell, Sticky } from 'vant';
 
 /**
  * 常见问题及回答控件。
@@ -44,24 +44,37 @@ import { Collapse, CollapseItem, Cell } from 'vant';
  *     默认显示的问题数目
  */
 export default {
-  name: 'faq-list',
+  name: 'FaqList',
   components: {
     [Collapse.name]: Collapse,
     [CollapseItem.name]: CollapseItem,
     [Cell.name]: Cell,
   },
   props: {
+    title: {
+      type: String,
+      default: '常见问题',
+    },
     faqs: {                           // 常见问题及回答对象数组。
       type: Array,
       required: true,
     },
-    filter: {                         // 过滤条件，没有的时候 list = faqs
-      type: String,
-      default: '',
-    },
-    defaultShowLength: {              // 默认显示的问题数目。
+    // 过滤条件，faqs 过滤出含 filter 的数据，无 filter 会包含在内
+    filter: String,
+    // 默认显示的问题数目
+    defaultShowLength: {
       type: Number,
       default: 6,
+    },
+    // faq 的 q 对应的 key
+    qKey: {
+      type: String,
+      default: 'question',
+    },
+    // faq 的 a 对应的 key
+    aKey: {
+      type: String,
+      default: 'answer',
     },
   },
   data() {

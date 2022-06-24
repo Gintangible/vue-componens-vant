@@ -7,12 +7,7 @@ import EnumSelect from './src/enum-select';
 
 import FaqList from './src/faq-list';
 
-// import IdCardField from './src/id-card-field';
 // import Identify from './src/identify';
-
-// import MobileField from './src/mobile-field';
-
-// import NameField from './src/name-field';
 
 import Signature from './src/signature';
 import SwitchCell from './src/switch-cell';
@@ -29,11 +24,7 @@ export {
 
   FaqList,
 
-  // IdCardField,
   // Identify,
-
-  // MobileField,
-  // NameField,
 
   Signature,
   SwitchCell,

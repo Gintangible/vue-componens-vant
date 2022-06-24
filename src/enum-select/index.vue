@@ -58,11 +58,12 @@ export default {
       type: null,
       required: true,
     },
+    // 是否移除lable中间的空格，placeholder 与 只读点击时有效
     removeSpace: {
       type: Boolean,
       default: true,
     },
-    readonly: Boolean,
+    // 只读时点击反馈
     reaonlyTip: {
       type: Boolean,
       default: true,
@@ -154,7 +155,7 @@ export default {
     },
     // 用户点击选项输入框后触发此事件。
     onClick() {
-      if (this.readonly && this.reaonlyTip) {
+      if (this.reaonlyTip) {
         Toast(`${this.fieldLabel}不可更改`);
         return;
       }

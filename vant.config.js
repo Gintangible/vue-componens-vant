@@ -50,16 +50,8 @@ module.exports = {
             title: '日期选择控件',
           },
           // {
-          //   path: 'name-field',
-          //   title: '姓名输入框控件',
-          // },
-          // {
           //   path: 'id-card-field',
           //   title: '身份证输入框控件',
-          // },
-          // {
-          //   path: 'mobile-field',
-          //   title: '手机号码输入框控件',
           // },
           // {
           //   path: 'credential-field',
