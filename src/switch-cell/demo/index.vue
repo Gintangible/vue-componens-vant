@@ -2,13 +2,13 @@
   <div>
     <switch-cell
       v-model="value"
-      :title="title"
+      :title="valueText"
       :label="label"
-      :readonly="readonly"
+      :disabled="disabled"
       @change="onChange"
     />
     <van-field
-      v-model="title"
+      v-model="valueText"
       label="标题"
       clearable
     />
@@ -17,15 +17,14 @@
       label="描述"
       clearable
     />
-    <van-field
-      v-model="valueText"
+    <!-- <van-field
+      v-model="value"
       label="开关的值"
       clearable
-      @blur="onChangeValueText"
-    />
+    /> -->
     <switch-cell
-      v-model="readonly"
-      title="是否只读"
+      v-model="disabled"
+      title="是否禁用"
     />
     <van-cell title="事件" />
     <van-list>
@@ -56,11 +55,10 @@ export default {
   },
   data() {
     return {
-      title: '测试开关',
-      label: '测试描述',
+      valueText: '测试描述',
+      label: 'SwitchCellLable',
       value: false,
-      valueText: 'false',
-      readonly: false,
+      disabled: false,
       count: 0,
       events: [],
     };
@@ -80,9 +78,6 @@ export default {
         name: 'change',
         param: String(value),
       });
-    },
-    onChangeValueText() {
-      this.value = (this.valueText.toLowerCase() === 'true');
     },
   },
 };

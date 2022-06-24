@@ -1,9 +1,22 @@
 <template>
   <div>
     <enum-select
+      v-model="enumStr"
+      label="单列数据"
+      :columns="['111', '222', '333']"
+      :readonly="readonly"
+      @confirm="onConfirm"
+      @change="onChange"
+    />
+    <van-field
+      v-model="enumStr"
+      label="选中的值"
+      clearable
+    />
+    <van-divider />
+    <enum-select
       v-model="type"
       label="证件类型"
-      placeholder="请选择证件类型"
       :columns="columns"
       :readonly="readonly"
       :rules="rules"
@@ -25,13 +38,13 @@
         v-for="(e, i) in events"
         :key="i"
         :title="e.order + ': ' + e.name"
-        :value="e.param.value"
+        :value="JSON.stringify(e.param)"
       />
     </van-list>
   </div>
 </template>
 <script>
-import { Field, List, Cell } from 'vant';
+import { Field, List, Cell, Divider } from 'vant';
 import SwitchCell from '../../switch-cell';
 import EnumSelect from '../index';
 
@@ -66,9 +79,11 @@ export default {
     [Cell.name]: Cell,
     [SwitchCell.name]: SwitchCell,
     [EnumSelect.name]: EnumSelect,
+    [Divider.name]: Divider,
   },
   data() {
     return {
+      enumStr: '',
       columns: CREDENTIAL_TYPES,
       type: 'IDENTITY_CARD',
       readonly: false,

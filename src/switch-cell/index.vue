@@ -1,14 +1,14 @@
 <template>
   <van-cell
-    center
     :title="title"
     :label="label"
+    :center="center"
   >
     <template #right-icon>
       <van-switch
         v-model="model"
         size="24"
-        :disabled="readonly"
+        :disabled="disabled"
         @change="onChange"
       />
     </template>
@@ -18,33 +18,29 @@
 <script>
 import { Cell, Switch } from 'vant';
 
-// 一个简单的组合{@link Cell}和{@link Switch}的控件示例
 export default {
-  name: 'switch-cell',
+  name: 'SwitchCell',
+
   components: {
     [Cell.name]: Cell,
     [Switch.name]: Switch,
   },
-  model: {
-    prop: 'value',
-  },
+
   props: {
-    value: {                        // 双向绑定的开关取值
+    value: {
       type: Boolean,
       required: true,
     },
-    title: {                        // 标题
+    title: {
       type: String,
       default: '',
     },
-    label: {                        // 标题下方的描述信息
+    label: {
       type: String,
       default: '',
     },
-    readonly: {                     // 是否只读
-      type: Boolean,
-      required: false,
-    },
+    center: Boolean,
+    disabled: Boolean,
   },
   data() {
     return {
@@ -60,7 +56,6 @@ export default {
     this.model = this.value;
   },
   methods: {
-    // switch 切换时触发事件
     onChange(newValue) {
       this.$emit('input', newValue);
       this.$emit('change', newValue);

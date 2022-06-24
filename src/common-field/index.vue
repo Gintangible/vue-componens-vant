@@ -1,6 +1,7 @@
 <template>
   <van-field
     v-model="text"
+    :name="name"
     :readonly="readonly"
     :label="label"
     :type="type"
@@ -55,9 +56,10 @@ export default {
       default: true,
     },
     // 以下 prop 见： https://vant-contrib.gitee.io/vant/v2/#/zh-CN/field
+    name: String,
     label: {
       type: String,
-      default: '姓　名',
+      default: '文 本',
     },
     type: String,
     placeholder: String,
