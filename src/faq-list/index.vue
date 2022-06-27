@@ -16,7 +16,8 @@
           :name="i"
           icon="question-o"
         >
-          <div v-html="item[aKey]" />
+          <div v-if="allowHtml" class="item-content" v-html="item[aKey]" />
+          <div v-else class="item-content">{{ item[aKey] }}</div>
         </van-collapse-item>
       </template>
       <van-cell
@@ -31,7 +32,7 @@
 </template>
 
 <script>
-import { Collapse, CollapseItem, Cell, Sticky } from 'vant';
+import { Collapse, CollapseItem, Cell } from 'vant';
 
 /**
  * 常见问题及回答控件。
@@ -61,6 +62,11 @@ export default {
     },
     // 过滤条件，faqs 过滤出含 filter 的数据，无 filter 会包含在内
     filter: String,
+    // 是否允许 message 内容中渲染 HTML
+    allowHtml: {
+      type: Boolean,
+      default: true,
+    },
     // 默认显示的问题数目
     defaultShowLength: {
       type: Number,
@@ -109,6 +115,9 @@ export default {
   color: #363636;
   font-weight: bold;
   font-size: 15px;
+}
+.item-content {
+  white-space: pre-line;
 }
 .show-more {
   color: #3d72e2;
