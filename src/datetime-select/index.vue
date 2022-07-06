@@ -7,7 +7,6 @@
       readonly
       :is-link="isLink"
       :input-align="inputAlign"
-      :right-icon="rightIcon"
       :required="required"
       :rules="rules"
       @click="onClick"
@@ -25,6 +24,7 @@
         :max-date="maxDate"
         :min-hour="minHour"
         :max-hour="maxHour"
+        :filter="filter"
         :min-minute="minMinute"
         :max-minute="maxMinute"
         :formatter="formatter"
@@ -59,7 +59,6 @@ export default {
       type: null,
       required: true,
     },
-
     readonlyToast: Boolean,
     // 见 vant field https://vant-contrib.gitee.io/vant/v2/#/zh-CN/datetime-picker
     type: {
@@ -72,15 +71,8 @@ export default {
     rules: {
       type: Array,
     },
-    inputAlign: {
-      type: String,
-      default: '',
-    },
-    // 右侧图片
-    rightIcon: {
-      type: String,
-      default: '',
-    },
+    inputAlign: String,
+    // type为time时，valueFormat无效，固定为：HH:mm
     valueFormat: {
       type: String,
       default: 'YYYY-MM-DDTHH:mmZ',
@@ -90,6 +82,8 @@ export default {
       type: String,
       default: 'YYYY-MM-DD HH:mm',
     },
+    // 默认选中的日期时间
+    defaultSelected: String,
     label: {
       type: String,
       default: '日期时间',
@@ -101,7 +95,7 @@ export default {
     maxHour: [Number, String],
     minMinute: [Number, String],
     maxMinute: [Number, String],
-    defaultSelected: String,
+    filter: Function,
   },
   data() {
     return {
@@ -170,10 +164,10 @@ export default {
       if (!newValue) {
         this.text = '';
         if (this.defaultSelected) {
-          const time = dayjs(this.defaultSelected, this.valueFormat);
           if (this.type === 'time') {
             this.selected = newValue;
           } else {
+            const time = dayjs(this.defaultSelected, this.valueFormat);
             this.selected = time.toDate();
           }
         } else {
@@ -181,19 +175,16 @@ export default {
         }
       } else {
         if (this.type === 'time') {
+          const nowTime = dayjs().format('YYYY-MM-DD');
           this.selected = newValue;
-          this.text = this.formatTimeText(newValue);
+          const time = dayjs(`${nowTime} ${newValue}`);
+          this.text = time.format(this.displayFormat);
         } else {
-        const time = dayjs(newValue, this.valueFormat);
+          const time = dayjs(newValue, this.valueFormat);
           this.selected = time.toDate();
           this.text = time.format(this.displayFormat);
         }
       }
-    },
-
-    // 格式化时间
-    formatTimeText(newValue) {
-      return newValue.replace(/^(.*):(.*)/g, '$1时$2分');
     },
   },
 };

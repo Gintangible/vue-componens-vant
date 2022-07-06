@@ -2,8 +2,8 @@
   <div>
     <van-form>
       <switch-cell
-        v-model="readonly"
-        title="是否只读"
+        v-model="disabled"
+        title="是否禁用"
       />
     </van-form>
     <van-form>
@@ -11,7 +11,7 @@
         v-model="datetime"
         label="日期时间rule"
         placeholder="请选择日期时间"
-        :readonly="readonly"
+        :disabled="disabled"
         :rules="rules"
       />
       <van-field
@@ -29,7 +29,7 @@
         display-format="YYYY年M月D日"
         label="日期"
         placeholder="请选择日期"
-        :readonly="readonly"
+        :disabled="disabled"
       />
       <van-field
         v-model="date"
@@ -42,11 +42,10 @@
       <datetime-select
         v-model="time"
         type="time"
-        value-format="HH:mm"
         display-format="H时m分"
         label="时间"
         placeholder="请选择时间"
-        :readonly="readonly"
+        :disabled="disabled"
       />
       <van-field
         v-model="time"
@@ -63,7 +62,7 @@
         display-format="YYYY年MM月"
         label="年月"
         placeholder="请选择年月"
-        :readonly="readonly"
+        :disabled="disabled"
       />
       <van-field
         v-model="yearmonth"
@@ -80,7 +79,7 @@
         display-format="MM月DD日"
         label="月日"
         placeholder="请选择月日"
-        :readonly="readonly"
+        :disabled="disabled"
       />
       <van-field
         v-model="monthday"
@@ -97,7 +96,7 @@
         display-format="YYYY年M月D日HH时"
         label="年月日小时"
         placeholder="请选择年月日小时"
-        :readonly="readonly"
+        :disabled="disabled"
       />
       <van-field
         v-model="datehour"
@@ -132,7 +131,7 @@ export default {
       yearmonth: dayjs().format('YYYY-MM'),
       monthday: dayjs().format('MM-DD'),
       datehour: dayjs().format('YYYY-MM-DDTHH:00Z'),
-      readonly: false,
+      disabled: false,
       rules: [{
         required: true,
         message: '简单验证日期',
