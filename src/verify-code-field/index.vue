@@ -1,30 +1,30 @@
 <template>
   <van-field
     v-model="code"
-    class="verify-code-field"
     center
     clearable
     :label="label"
-    :placeholder="placeholder"
-    @input="onInput"
+    :placeholder="placeholder || `请填写${label}`"
     @blur="onBlur"
   >
     <template #button>
       <van-button
-        v-if="!showCountDown"
         size="small"
-        type="primary"
+        type="info"
+        :disabled="showCountDown"
         @click="onClickSend"
       >
-        {{ buttonText }}
+        <van-count-down
+          v-if="showCountDown"
+          :style="{color: countDownColor}"
+          :time="resendTimeout"
+          format="ss秒"
+          @finish="onCountDownFinish"
+        />
+        <template v-else>
+          {{ buttonText }}
+        </template>
       </van-button>
-      <van-count-down
-        v-if="showCountDown"
-        :style="{color: countDownColor}"
-        :time="resendTimeout"
-        format="ss秒"
-        @finish="onCountDownFinish"
-      />
     </template>
   </van-field>
 </template>
@@ -40,37 +40,31 @@ export default {
     [Button.name]: Button,
     [CountDown.name]: CountDown,
   },
-  model: {
-    prop: 'value',
-  },
   props: {
-    value: {                          // 绑定的验证码的值
+    value: {
       type: String,
       required: true,
     },
-    label: {                          // 验证码输入框标签
+    label: {
       type: String,
       default: '短信验证码',
     },
-    placeholder: {                    // 验证码输入框提示文字
-      type: String,
-      default: '请填写短信验证码',
-    },
-    sendButtonText: {                 // 发送验证码按钮文字
+    placeholder: String,
+    sendButtonText: {
       type: String,
       default: '发送验证码',
     },
-    resendButtonText: {               // 重新发送验证码按钮文字
+    resendButtonText: {
       type: String,
       default: '重新发送验证码',
     },
-    resendTimeout: {                  // 重新发送验证码间隔时间
+    resendTimeout: {
       type: Number,
       default: 60000,
     },
-    countDownColor: {                 //  倒计时文字的CSS颜色
+    countDownColor: {
       type: String,
-      default: '#3d72e2',
+      default: '#fff',
     },
   },
   data() {
@@ -96,21 +90,15 @@ export default {
       this.showCountDown = false;
     },
 
-    onInput(value) {
-      this.$emit('input', value);
-    },
-
     onBlur() {
-      this.$emit('change', this.code);
+      this.$emit('blur', this.code.trim());
     },
   },
 };
 </script>
 
 <style lang="less" scoped>
-.verify-code-field {
-  .van-button--small {
-    height: 24px;
-  }
+.van-button {
+  min-width: 80px;
 }
 </style>

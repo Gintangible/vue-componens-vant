@@ -81,7 +81,7 @@ export default {
       placeholder: '请填写短信验证码',
       sendButtonText: '发送验证码',
       resendButtonText: '重新发送验证码',
-      countDownColor: '#3d72e2',
+      countDownColor: '#fff',
       resendTimeout: 60000,
       count: 0,
       events: [],
