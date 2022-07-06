@@ -1,15 +1,15 @@
 <template>
-  <div class="datetime-select van-cell">
+  <div class="datetime-select">
     <van-field
-      :required="required"
       :value="text"
       :label="label"
       :placeholder="placeholder || `请选择${label}`"
       readonly
       :is-link="isLink"
       :input-align="inputAlign"
-      :rules="rules"
       :right-icon="rightIcon"
+      :required="required"
+      :rules="rules"
       @click="onClick"
     />
     <van-popup
@@ -44,31 +44,31 @@ import {
  * Vant的{@link DatetimePicker}组件的时间格式。
  */
 
-// 枚举类型下拉选择框。
+// 时间类型下拉选择框。
 export default {
   name: 'DatetimeSelect',
+
   components: {
     [Field.name]: Field,
     [DatetimePicker.name]: DatetimePicker,
     [Popup.name]: Popup,
   },
-  model: {
-    prop: 'value',
-  },
+
   props: {
     value: {              // 当前选中的日期时间的数值，注意为了支持null此参数不限制类型
       type: null,
       required: true,
     },
 
-    readonly: Boolean,
+    readonlyToast: Boolean,
     // 见 vant field https://vant-contrib.gitee.io/vant/v2/#/zh-CN/datetime-picker
-    type: {               // 选择类型
+    type: {
       type: String,
       default: 'datetime',
     },
     required: Boolean,
     isLink: Boolean,
+    disabled: Boolean,
     rules: {
       type: Array,
     },
@@ -85,45 +85,23 @@ export default {
       type: String,
       default: 'YYYY-MM-DDTHH:mmZ',
     },
+    // 见 dayjs https://dayjs.gitee.io/docs/zh-CN/display/format
     displayFormat: {
       type: String,
-      default: 'YYYY年MM月DD日HH时mm分',
+      default: 'YYYY-MM-DD HH:mm',
     },
     label: {
       type: String,
       default: '日期时间',
     },
-    placeholder: {
-      type: String,
-    },
-    minDate: {
-      type: Date,
-      default: () => dayjs().subtract(10, 'year').toDate(),
-    },
-    maxDate: {
-      type: Date,
-      default: () => dayjs().add(10, 'year').toDate(),
-    },
-    minHour: {
-      type: Number,
-      default: 0,
-    },
-    maxHour: {
-      type: Number,
-      default: 23,
-    },
-    minMinute: {
-      type: Number,
-      default: 0,
-    },
-    maxMinute: {
-      type: Number,
-      default: 59,
-    },
-    defaultSelected: {    // 默认选中的日期时间
-      type: String,
-      default: '',
-    },
+    placeholder: String,
+    minDate: Date,
+    maxDate: Date,
+    minHour: [Number, String],
+    maxHour: [Number, String],
+    minMinute: [Number, String],
+    maxMinute: [Number, String],
+    defaultSelected: String,
   },
   data() {
     return {
@@ -145,8 +123,10 @@ export default {
   methods: {
     // 用户点击选项输入框后触发此事件。
     onClick() {
-      if (this.readonly) {
-        Toast(`${this.label}不可更改`);
+      if (this.disabled) {
+        if (this.readonlyToast) {
+          Toast(`${this.label}不可更改`);
+        }
         return;
       }
       this.showPicker = true;
@@ -219,11 +199,4 @@ export default {
 };
 </script>
 <style scoped lang="less">
-.datetime-select {
-  display: block;
-  padding: 0;
-  .van-cell::after {
-    display: none;
-  }
-}
 </style>

@@ -23,7 +23,7 @@
       <van-cell
         v-if="defaultShowLength < list.length"
         title=""
-        :value="showLength == defaultShowLength ? '更多问题' : '收起'"
+        :value="showLength == defaultShowLength ? moreText : '收起'"
         value-class="show-more"
         @click="showMore"
       />
@@ -66,6 +66,10 @@ export default {
     allowHtml: {
       type: Boolean,
       default: true,
+    },
+    moreText: {
+      type: String,
+      default: '更多问题',
     },
     // 默认显示的问题数目
     defaultShowLength: {

@@ -4,6 +4,7 @@ import CommonField from './src/common-field';
 import DateTimeSelect from './src/datetime-select';
 
 import EnumSelect from './src/enum-select';
+import EnumSelectCheckbox from './src/enum-select-checkbox';
 
 import FaqList from './src/faq-list';
 
@@ -23,6 +24,7 @@ export {
   DateTimeSelect,
 
   EnumSelect,
+  EnumSelectCheckbox,
 
   FaqList,
 

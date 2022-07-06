@@ -1,37 +1,33 @@
 <template>
   <div>
-    <enum-select
+    <enum-select-checkbox
       v-model="enumStr"
       label="单列数据"
       :columns="['111', '222', '333']"
-      :disabled="disabled"
+      :readonly="readonly"
       @confirm="onConfirm"
       @change="onChange"
     />
-    <van-field
-      v-model="enumStr"
-      label="选中的值"
-      clearable
-    />
+    <van-cell label="选中的值">
+      {{ enumStr }}
+    </van-cell>
     <van-divider />
-    <enum-select
+    <enum-select-checkbox
       v-model="type"
       label="证件类型"
       :columns="columns"
-      :disabled="disabled"
+      :readonly="readonly"
       :rules="rules"
       @confirm="onConfirm"
       @change="onChange"
     />
     <switch-cell
-      v-model="disabled"
+      v-model="readonly"
       title="是否只读"
     />
-    <van-field
-      v-model="type"
-      label="选中的值"
-      clearable
-    />
+    <van-cell label="选中的值">
+      {{ type }}
+    </van-cell>
     <van-cell title="事件" />
     <van-list>
       <van-cell
@@ -46,47 +42,47 @@
 <script>
 import { Field, List, Cell, Divider } from 'vant';
 import SwitchCell from '../../switch-cell';
-import EnumSelect from '../index';
+import EnumSelectCheckbox from '../index';
 
 const CREDENTIAL_TYPES = [
   {
-    name: '身份证',
+    label: '身份证',
     value: 'IDENTITY_CARD',
   },
 
   {
-    name: '护照',
+    label: '护照',
     value: 'PASSPORT',
   },
 
   {
-    name: '中国人民解放军军官证',
+    label: '中国人民解放军军官证',
     value: 'OFFICER_CARD',
   },
 
   {
-    name: '中国人民武装警察警官证',
+    label: '中国人民武装警察警官证',
     value: 'POLICE_CARD',
   },
 ];
 
-//  EnumSelect 的使用例子。
+//  EnumSelectCheckbox 的使用例子。
 export default {
-  name: 'enum-select-demo',
+  name: 'EnumSelectCheckboxDemo',
   components: {
     [Field.name]: Field,
     [List.name]: List,
     [Cell.name]: Cell,
     [SwitchCell.name]: SwitchCell,
-    [EnumSelect.name]: EnumSelect,
+    [EnumSelectCheckbox.name]: EnumSelectCheckbox,
     [Divider.name]: Divider,
   },
   data() {
     return {
-      enumStr: '',
+      enumStr: [],
       columns: CREDENTIAL_TYPES,
-      type: 'IDENTITY_CARD',
-      disabled: false,
+      type: ['IDENTITY_CARD'],
+      readonly: false,
       count: 0,
       events: [],
       rules: [

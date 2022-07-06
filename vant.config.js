@@ -38,16 +38,20 @@ module.exports = {
             title: '输入框控件',
           },
           {
-            path: 'panel-form',
-            title: 'panel-form面板',
-          },
-          {
             path: 'enum-select',
             title: '枚举控件',
           },
           {
+            path: 'enum-select-checkbox',
+            title: '枚举多选控件',
+          },
+          {
             path: 'datetime-select',
             title: '日期选择控件',
+          },
+          {
+            path: 'panel-form',
+            title: 'panel-form面板',
           },
           // {
           //   path: 'id-card-field',

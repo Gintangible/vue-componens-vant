@@ -6,6 +6,7 @@
       :label="label"
       :placeholder="fieldPlaceholder"
       readonly
+      :disabled="disabled"
       :is-link="isLink"
       :required="required"
       :rules="fieldRules"
@@ -23,7 +24,7 @@
         :value-key="valueKey"
         :item-height="itemHeight"
         show-toolbar
-        @cancel="showPicker = false"
+        @cancel="onCancel"
         @confirm="onConfirm"
         @change="onChange"
       >
@@ -64,7 +65,7 @@ export default {
       default: true,
     },
     // 只读时点击反馈
-    reaonlyTip: {
+    reaonlyToast: {
       type: Boolean,
       default: true,
     },
@@ -75,6 +76,7 @@ export default {
       required: true,
     },
     required: Boolean,
+    disabled: Boolean,
     isLink: {
       type: Boolean,
       default: true,
@@ -155,11 +157,18 @@ export default {
     },
     // 用户点击选项输入框后触发此事件。
     onClick() {
-      if (this.reaonlyTip) {
-        Toast(`${this.fieldLabel}不可更改`);
+      if (this.disabled) {
+        if (this.reaonlyToast) {
+          Toast(`${this.fieldLabel}不可更改`);
+        }
         return;
       }
       this.showPicker = true;
+    },
+
+    onCancel() {
+      this.showPicker = false;
+      this.$emit('cancel');
     },
 
     // 修改选项下拉框选项后触发的事件。
