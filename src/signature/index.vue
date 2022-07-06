@@ -1,13 +1,7 @@
 <template>
   <div class="signature-container">
-    <div class="signature-title">
+    <div slot="title" class="signature-title">
       {{ title }}
-    </div>
-    <div
-      v-if="tipText"
-      class="signature-tips"
-    >
-      {{ tipText }}
     </div>
     <div
       class="signature-content"
@@ -17,19 +11,15 @@
         ref="canvas"
         class="signature-canvas"
       />
-      <div
+      <van-image
         v-if="signSrc || readonly"
+        :src="signSrc"
+        fit="fill"
         class="signature-blank"
-      >
-        <van-image
-          v-if="signSrc"
-          :src="signSrc"
-          fit="contain"
-        />
-      </div>
+      />
     </div>
-    <div class="signature-hint">
-      请使用正楷清晰地写上个人签名
+    <div v-if="tipText" class="signature-hint">
+      {{ tipText }}
     </div>
     <div
       v-if="!readonly"
@@ -73,17 +63,13 @@ export default {
       type: String,
       default: '',
     },
-
     // 签名的title
     title: {
       type: String,
       default: '签名区域',
     },
     // 已有签名
-    signUrl: {
-      type: String,
-      default: '',
-    },
+    signUrl: String,
     readonly: Boolean,
     height: {
       type: [String, Number],
@@ -107,7 +93,7 @@ export default {
     // 提示文字
     tipText: {
       type: String,
-      default: ''
+      default: '请使用正楷清晰地写上个人签名',
     },
 
     // eslint-disable-next-line
@@ -195,12 +181,6 @@ export default {
 .signature-title {
   font-size: 16px;
   line-height: 24px;
-}
-
-.signature-tips {
-  font-size: 12px;
-  color: #f00;
-  line-height: 20px;
 }
 
 .signature-content {
