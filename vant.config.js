@@ -53,6 +53,10 @@ module.exports = {
             path: 'panel-form',
             title: 'panel-form面板',
           },
+          {
+            path: 'table',
+            title: '表格组件',
+          },
           // {
           //   path: 'id-card-field',
           //   title: '身份证输入框控件',

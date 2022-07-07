@@ -15,6 +15,7 @@ import PanelForm from 'panel-form';
 import Signature from './src/signature';
 import SwitchCell from './src/switch-cell';
 
+import VanTable from './src/table';
 import VerifyCodeField from './src/verify-code-field';
 
 export {
@@ -35,5 +36,6 @@ export {
   Signature,
   SwitchCell,
 
+  VanTable,
   VerifyCodeField,
 };

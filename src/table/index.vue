@@ -1,80 +1,59 @@
 <template>
-  <div class="vant-table">
-    <table
-      ref="table"
-      cellspacing="0"
-      :class="['vant-table-content', border ? 'table-border' : '']"
+  <div :class="[
+    'table',
+    border ? 'table-border': '',
+    ]">
+    <van-row
+      type="flex"
+      :class="border ? 'table-row_border': ''"
     >
-      <colgroup>
-        <col
-          v-if="showIndex"
-          width="24px"
-        >
-        <col
-          v-for="(item, index) in tableHeader"
-          :key="index"
-          :width="item.width || colWidth"
-        >
-      </colgroup>
-      <thead
-        :class="['vant-table-header',
-                 stripe ? 'table-cell__row--striped' : '',
-                 border ? 'table-cell__border': ''
+      <van-col
+        v-for="(col, index) in tableHeader"
+        :key="index"
+        :span="col.span || colSpan"
+        :class="['tabel-header table-cell',
+          align ? `is-${headerAlign}` : `is-${align}`,
+          headerCellClass,
         ]"
       >
-        <tr>
-          <th
-            v-if="showIndex"
-            class="table-cell"
-          >
-            序号
-          </th>
-          <th
-            v-for="(item, index) in tableHeader"
-            :key="index"
-            class="table-cell"
-          >
-            {{ item.label }}
-          </th>
-        </tr>
-      </thead>
-      <tbody class="vant-table-body">
-        <tr
-          v-for="(row, $index) in data"
-          :key="$index"
-          :class="['table-row',
-                   (stripe && $index % 2 !== 0) ? 'table-cell__row--striped' : '',
-                   border ? 'table-cell__border': ''
-          ]"
-        >
-          <td
-            v-if="showIndex"
-            class="table-cell"
-          >
-            {{ $index + 1 }}
-          </td>
-          <td
-            v-for="(column, i) in tableHeader"
-            :key="i"
-            class="table-cell"
-          >
-            <slot
-              v-if="column.slot"
-              :name="column.slot"
-              :row="row"
-              :$index="$index"
-            />
-            <div v-else>
-              {{ row[column.prop] }}
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        <div class="cell">
+          {{ col.label }}
+        </div>
+      </van-col>
+    </van-row>
+    <van-row
+      v-for="(item, i) in data"
+      type="flex"
+      :key="i"
+      :class="[
+        (stripe && i % 2 !== 0) ? 'table-row__striped' : '',
+        border ? 'table-row_border': '',
+      ]"
+    >
+      <van-col
+        v-for="(col, j) in tableHeader"
+        :key="j"
+        :span="col.span || colSpan"
+        :class="['table-cell',
+          align ? `is-${align}` : '',
+          cellClass
+        ]"
+      >
+        <slot
+          v-if="col.slot"
+          :name="col.slot"
+          :$index="i"
+          :row="cloneRow(item)"
+        />
+        <div class="cell">
+          {{ item[col.prop] }}
+        </div>
+      </van-col>
+    </van-row>
     <div
       v-if="!data || data.length === 0"
       ref="emptyBlock"
-      class="vant-table__empty-block"
+      class="table__empty-block"
     >
       <span class="el-table__empty-text">
         <slot name="empty">{{ emptyText }}</slot>
@@ -82,95 +61,119 @@
     </div>
   </div>
 </template>
+
 <script>
+import { cloneDeep } from 'lodash';
+import { Row, Col } from 'vant';
+
 export default {
+  name: 'VanTable',
+
+  components: {
+    [Row.name]: Row,
+    [Col.name]: Col,
+  },
+
   props: {
     // 数组内容
     data: {
       type: Array,
       required: true,
     },
-
     // 列表内容
     tableHeader: {
       type: Array,
       required: true,
     },
-
-    // 显示序号
-    showIndex: {
-      type: Boolean,
-    },
-
-    // 纵向边框
-    border: {
-      type: Boolean,
-    },
-
-    // 斑马条纹
+    showIndex: Boolean,
+    border: Boolean,
     stripe: Boolean,
-
+    headerAlign: String,
+    headerCellClass: String,
+    cellClass: String,
+    align: {
+      type: String,
+      default: 'left',
+    },
     // 没有数据时
     emptyText: {
       type: String,
       default: '暂无数据',
     }
   },
-  data() {
-    return {
-      colWidth: '30px',
-    };
-  },
-  mounted() {
-    this.setColWidth();
-  },
-  methods: {
-    setColWidth() {
-      const { offsetWidth } = this.$refs.table;
-      let fixWidth = 0;
-      const len = this.showIndex ? this.tableHeader.length + 1 : this.tableHeader.length;
-      this.tableHeader.forEach((item) => {
-        fixWidth += parseInt(item.width || 0, 10);
+
+  computed: {
+    colSpan() {
+      let remainNum = 0;
+      let spans = 0
+      this.tableHeader.forEach(i => {
+        if (i.span) {
+          spans += +i.span;
+        } else {
+          remainNum++;
+        }
       });
-      this.colWidth = `${Math.round((offsetWidth - fixWidth) / len)}px`;
-    }
+      return remainNum ? Math.floor((24 - spans) / remainNum) : 1;
+    },
+  },
+
+  methods: {
+    cloneRow(row) {
+      return cloneDeep(row);
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
-.vant-table-content {
-  width: 100%;
-  th {
-    padding: 6px 0;
-    font-size: 14px;
-    border-bottom: 1px dashed #b5b5b5;
+.table {
+  background: #fff;
+  &.table-border {
+    border: 1px solid #dfe6ec;
+    border-right: 0;
+    border-bottom: 0;
   }
-  .vant-table-body {
-    text-align: center;
+  .tabel-header {
+    height: 32px;
+    background-color: #f8f8f9;
   }
-  .table-cell {
-    padding: 10px 0;
-    font-size: 14px;
-    border-bottom: 1px solid #ebeef5;
-  }
-  .table-cell__row--striped {
+  .table-row__striped {
     .table-cell {
       background: #fafafa;
     }
   }
-  &.table-border {
-    border: 1px solid #ebeef5;
-    border-right: 0;
-    border-bottom: 0;
+  .table-cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #dfe6ec;
+    &.is-center {
+      text-align: center;
+    }
+    &.is-right {
+      text-align: right;
+    }
+    &.is-left {
+      text-align: left;
+    }
+    .cell {
+      padding: 0 4px;
+    }
+  }
+  .table-row_border {
     .table-cell {
       border-right: 1px solid #ebeef5;
     }
   }
 }
 
-.vant-table__empty-block {
-  padding: 12px 0;
+.table-cell {
+  word-break: break-all;
+}
+
+.table__empty-block {
+  padding: 10px 0;
   text-align: center;
   font-size: 14px;
   color: #999;
