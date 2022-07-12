@@ -38,6 +38,10 @@ module.exports = {
             title: '输入框控件',
           },
           {
+            path: 'enum-cascader-field',
+            title: '枚举输入控件',
+          },
+          {
             path: 'enum-select',
             title: '枚举控件',
           },

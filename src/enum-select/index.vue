@@ -64,6 +64,7 @@ export default {
       type: Boolean,
       default: true,
     },
+    readonly: Boolean,
     // 只读时点击反馈
     reaonlyToast: {
       type: Boolean,
@@ -157,7 +158,7 @@ export default {
     },
     // 用户点击选项输入框后触发此事件。
     onClick() {
-      if (this.disabled) {
+      if (this.disabled || this.readonly) {
         if (this.reaonlyToast) {
           Toast(`${this.fieldLabel}不可更改`);
         }

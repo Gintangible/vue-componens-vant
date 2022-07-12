@@ -215,14 +215,14 @@ export default {
 
   methods: {
     onClick() {
+      if (this.disabled) {
+        Toast(`${this.label}不可更改`);
+        return;
+      }
       if (this.beforeSelect) {
         this.beforeSelect().then(() => {
           this.showPopup = true;
         });
-        return;
-      }
-      if (this.disabled) {
-        Toast(`${this.label}不可更改`);
         return;
       }
       this.showPopup = true;
