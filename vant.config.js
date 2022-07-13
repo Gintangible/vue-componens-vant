@@ -59,7 +59,7 @@ module.exports = {
           },
           {
             path: 'datetime-range',
-            title: '日期区间控件-多行',
+            title: '日期区间控件',
           },
           {
             path: 'panel-form',
@@ -69,10 +69,6 @@ module.exports = {
             path: 'table',
             title: '表格组件',
           },
-          // {
-          //   path: 'id-card-field',
-          //   title: '身份证输入框控件',
-          // },
           {
             path: 'verify-code-field',
             title: '短信验证码输入框控件',
@@ -81,10 +77,6 @@ module.exports = {
             path: 'identify-code',
             title: '验证码控件',
           },
-          // {
-          //   path: 'datetime-range',
-          //   title: '日期区间控件',
-          // },
         ],
       },
       // 其他功能的组件库

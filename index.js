@@ -9,8 +9,6 @@ import EnumSelectCheckbox from './src/enum-select-checkbox';
 
 import FaqList from './src/faq-list';
 
-// import Identify from './src/identify';
-
 import PanelForm from 'panel-form';
 
 import Signature from './src/signature';
@@ -30,8 +28,6 @@ export {
   EnumSelectCheckbox,
 
   FaqList,
-
-  // Identify,
 
   PanelForm,
 
