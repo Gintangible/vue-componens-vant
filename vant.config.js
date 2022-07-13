@@ -38,6 +38,10 @@ module.exports = {
             title: '输入框控件',
           },
           {
+            path: 'calendar-field',
+            title: '日历控件',
+          },
+          {
             path: 'enum-cascader-field',
             title: '枚举输入控件',
           },
@@ -52,6 +56,10 @@ module.exports = {
           {
             path: 'datetime-select',
             title: '日期选择控件',
+          },
+          {
+            path: 'datetime-range',
+            title: '日期区间控件-多行',
           },
           {
             path: 'panel-form',

@@ -9,6 +9,7 @@
     :required="required"
     :disabled="disabled"
     :error="error"
+    :input-align="inputAlign"
     :clickable="clickable"
     :formatter="fieldFormatter"
     :format-trigger="formatterTrigger"
@@ -67,11 +68,13 @@ export default {
     readonly: Boolean,
     disabled: Boolean,
     required: Boolean,
+    inputAlign: String,
     clickable: Boolean,
     error: Boolean,
     leftIcon: String,
     rightIcon:String,
-    formatter: Function,clearable: {
+    formatter: Function,
+    clearable: {
       type: Boolean,
       default: true,
     },
@@ -86,7 +89,7 @@ export default {
   },
   data() {
     return {
-      text: '',                       // 当前姓名
+      text: '',
     };
   },
 
@@ -102,7 +105,6 @@ export default {
       if (this.required) {
         rules = [{
           required: true,
-          message: this.fieldPlaceholder,
         }];
       }
       return rules.concat(this.rules || []);
@@ -139,17 +141,16 @@ export default {
     onClick() {
       if (this.readonly && this.reaonlyTip) {
         Toast(`${this.fieldLabel}不可更改`);
+        return;
       }
     },
 
-    // 当姓名输入框被修改时触发此事件。
     onChange() {
       // 触发 input 事件
       this.$emit('input', this.text);
       this.$emit('change', this.text);
     },
 
-    // 当输入框失去输入焦点时触发此事件。
     onBlur() {
       if (!this.readonly) {
         this.$emit('input', this.text);

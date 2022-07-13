@@ -1,10 +1,12 @@
 <template>
   <div class="datetime-select">
     <van-field
+      :name="name"
       :value="text"
       :label="label"
       :placeholder="placeholder || `请选择${label}`"
       readonly
+      clickable
       :is-link="isLink"
       :input-align="inputAlign"
       :required="required"
@@ -65,6 +67,7 @@ export default {
       type: String,
       default: 'datetime',
     },
+    name: String,
     required: Boolean,
     isLink: Boolean,
     disabled: Boolean,

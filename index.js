@@ -1,9 +1,9 @@
+import CalendarField from './src/calendar-field';
 import CommonField from './src/common-field';
 
-// import DateTimeRange from './src/datetime-range';
+import DateTimeRange from './src/datetime-range';
 import DateTimeSelect from './src/datetime-select';
 
-import EnumCascaderField from './src/enum-cascader-field';
 import EnumSelect from './src/enum-select';
 import EnumSelectCheckbox from './src/enum-select-checkbox';
 
@@ -20,12 +20,12 @@ import VanTable from './src/table';
 import VerifyCodeField from './src/verify-code-field';
 
 export {
+  CalendarField,
   CommonField,
 
-  // DateTimeRange,
+  DateTimeRange,
   DateTimeSelect,
 
-  EnumCascaderField,
   EnumSelect,
   EnumSelectCheckbox,
 

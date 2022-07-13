@@ -90,7 +90,7 @@ const CREDENTIAL_TYPES = [
 
 //  EnumSelect 的使用例子。
 export default {
-  name: 'enum-select-demo',
+  name: 'enum-cascader-demo',
   components: {
     [Field.name]: Field,
     [List.name]: List,
