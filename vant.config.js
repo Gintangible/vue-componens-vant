@@ -42,6 +42,18 @@ module.exports = {
             title: '日历控件',
           },
           {
+            path: 'datetime-select',
+            title: '日期选择控件',
+          },
+          {
+            path: 'datetime-range',
+            title: '日期区间控件',
+          },
+          {
+            path: 'document-popup',
+            title: '文档查看弹窗',
+          },
+          {
             path: 'enum-cascader-field',
             title: '枚举输入控件',
           },
@@ -52,14 +64,6 @@ module.exports = {
           {
             path: 'enum-select-checkbox',
             title: '枚举多选控件',
-          },
-          {
-            path: 'datetime-select',
-            title: '日期选择控件',
-          },
-          {
-            path: 'datetime-range',
-            title: '日期区间控件',
           },
           {
             path: 'panel-form',
