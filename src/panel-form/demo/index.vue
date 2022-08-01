@@ -1,8 +1,8 @@
 <template>
   <div>
     <panel-form ref="form">
-      <common-field v-model="form.name" name="name" label="姓 名" required />
-      <common-field v-model="form.mobile" name="mobile" label="手机号码" required />
+      <van-field v-model.trim="form.name" name="name" label="姓 名" required />
+      <van-field v-model.trim="form.mobile" name="mobile" label="手机号码" required />
     </panel-form>
     <div class="form-content">
       {{ formEvents }}
@@ -46,18 +46,17 @@
 </template>
 
 <script>
-import { Cell, List, Button } from 'vant';
+import { Cell, List, Button, Field } from 'vant';
 import PanelForm from '../index';
-import CommonField from '../../common-field';
 
 export default {
   name: 'PanelDemo',
   components: {
     [Cell.name]: Cell,
+    [Field.name]: Field,
     [List.name]: List,
     [Button.name]: Button,
     [PanelForm.name]: PanelForm,
-    CommonField,
   },
   data() {
     return {

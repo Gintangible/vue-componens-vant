@@ -1,5 +1,4 @@
 import CalendarField from './src/calendar-field';
-import CommonField from './src/common-field';
 
 import DateTimeRange from './src/datetime-range';
 import DateTimeSelect from './src/datetime-select';
@@ -20,7 +19,6 @@ import VerifyCodeField from './src/verify-code-field';
 
 export {
   CalendarField,
-  CommonField,
 
   DateTimeRange,
   DateTimeSelect,

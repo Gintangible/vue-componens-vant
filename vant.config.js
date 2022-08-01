@@ -34,10 +34,6 @@ module.exports = {
             title: '组合Cell和Switch的开关控件',
           },
           {
-            path: 'common-field',
-            title: '输入框控件',
-          },
-          {
             path: 'calendar-field',
             title: '日历控件',
           },

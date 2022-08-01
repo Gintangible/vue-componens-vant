@@ -12,14 +12,14 @@
       @confirm="onConfirmType"
       @change="onChangeType"
     />
-    <common-field
+    <van-field
       v-model="cascader[valueKey]"
       :name="valueName"
       :readonly="readonly || valueReadonly"
       :disabled="disabled"
       :label="valueLabel"
       :required="required"
-      :placeholder="valuePlaceholder"
+      :placeholder="valuePlaceholder || `请选择${valueLabel}`"
       clearable
       trim
       :rules="rules"
@@ -31,14 +31,14 @@
 
 <script>
 import { cloneDeep } from 'lodash';
+import { Field } from 'vant';
 import EnumSelect from '../enum-select';
-import CommonField from '../common-field';
 
 export default {
   name: 'EnumCascaderField',
 
   components: {
-    [CommonField.name]: CommonField,
+    [Field.name]: Field,
     [EnumSelect.name]: EnumSelect,
   },
 
