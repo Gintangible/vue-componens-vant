@@ -9,9 +9,11 @@ import EnumSelectCheckbox from './src/enum-select-checkbox';
 
 import FaqList from './src/faq-list';
 
+import IdentifyCode from './src/identify-code';
+import IndexBarSearch from './src/index-bar-search';
+
 import PanelForm from 'panel-form';
 
-import SearchListIndex from './src/search-list-index';
 import Signature from './src/signature';
 import SwitchCell from './src/switch-cell';
 
@@ -29,9 +31,11 @@ export {
 
   FaqList,
 
+  IdentifyCode,
+  IndexBarSearch,
+
   PanelForm,
 
-  SearchListIndex,
   Signature,
   SwitchCell,
 
