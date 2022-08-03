@@ -11,10 +11,10 @@ import FaqList from './src/faq-list';
 
 import PanelForm from 'panel-form';
 
+import SearchListIndex from './src/search-list-index';
 import Signature from './src/signature';
 import SwitchCell from './src/switch-cell';
 
-import VanTable from './src/table';
 import VerifyCodeField from './src/verify-code-field';
 
 export {
@@ -31,9 +31,9 @@ export {
 
   PanelForm,
 
+  SearchListIndex,
   Signature,
   SwitchCell,
 
-  VanTable,
   VerifyCodeField,
 };

@@ -62,12 +62,12 @@ module.exports = {
             title: '枚举多选控件',
           },
           {
-            path: 'panel-form',
-            title: 'panel-form面板',
+            path: 'search-list-index',
+            title: '搜索索引列表',
           },
           {
-            path: 'table',
-            title: '表格组件',
+            path: 'panel-form',
+            title: 'panel-form面板',
           },
           {
             path: 'verify-code-field',
