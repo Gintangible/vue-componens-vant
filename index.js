@@ -13,7 +13,7 @@ import IdentifyCode from './src/identify-code';
 
 import PanelForm from 'panel-form';
 
-import SearchListStatic from './src/search-list-static';
+import SearchList from './src/search-list';
 import Signature from './src/signature';
 import SwitchCell from './src/switch-cell';
 
@@ -35,7 +35,7 @@ export {
 
   PanelForm,
 
-  SearchListStatic,
+  SearchList,
   Signature,
   SwitchCell,
 

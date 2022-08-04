@@ -62,8 +62,8 @@ module.exports = {
             title: '枚举多选控件',
           },
           {
-            path: 'search-list-static',
-            title: '静态搜索列表',
+            path: 'search-list',
+            title: '搜索展示',
           },
           {
             path: 'panel-form',

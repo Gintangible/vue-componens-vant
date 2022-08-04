@@ -81,6 +81,7 @@ export default {
       default: true,
     },
     searchSticky: Boolean,
+    listAsync: Boolean,
     list: {
       type: Array,
       default: () => ([]),
@@ -144,6 +145,10 @@ export default {
     },
 
     onSearch() {
+      if (this.listAsync) {
+        this.$emit('search', this.text);
+        return;
+      }
       this.listDeconstruct(this.text);
     },
     confirm(item) {
