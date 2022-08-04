@@ -12,9 +12,9 @@
         @search="onSearch"
       >
         <template #action>
-          <div @click="onSearch">
-            搜索
-          </div>
+          <slot name="action" @click="onCancel">
+            取消
+          </slot>
         </template>
       </van-search>
     </div>
@@ -143,13 +143,15 @@ export default {
         this.indexList = list;
       }
     },
-
     onSearch() {
       if (this.listAsync) {
         this.$emit('search', this.text);
         return;
       }
       this.listDeconstruct(this.text);
+    },
+    onCancel() {
+      this.$emit('cancel');
     },
     confirm(item) {
       this.$emit('confirm', item);
