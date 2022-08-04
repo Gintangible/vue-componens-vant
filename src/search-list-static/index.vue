@@ -1,8 +1,10 @@
 <template>
-  <div :class="['index-container',
-    filter ? 'index-filter' : ''
-  ]">
-    <div v-if="filter" class="filter-wrap">
+  <div
+    :class="['search-list',
+             searchSticky ? 'search-list_sticky' : ''
+    ]"
+  >
+    <div :class="searchSticky ? 'search-sticky' : ''">
       <van-search
         v-model.trim="text"
         show-action
@@ -16,8 +18,19 @@
         </template>
       </van-search>
     </div>
+    <van-cell-group v-if="!indexBar">
+      <van-cell
+        v-for="(item, i) in indexList"
+        :key="i"
+        :title="item[listLabel]"
+        clickable
+        @click="confirm(item)"
+      />
+    </van-cell-group>
     <van-index-bar
+      v-else
       :index-list="indexList"
+      :sticky-offset-top="searchSticky ? 54 : 0"
       class="search-content"
     >
       <div
@@ -26,28 +39,32 @@
         class="bar-item"
       >
         <van-index-anchor :index="k" />
-        <van-cell
-          v-for="(item, i) in contentMap[k]"
-          :key="i"
-          :title="item[listLabel]"
-          clickable
-          @click="confirm(item)"
-        />
+        <van-cell-group>
+          <van-cell
+            v-for="(item, i) in contentMap[k]"
+            :key="i"
+            :title="item[listLabel]"
+            clickable
+            @click="confirm(item)"
+          />
+        </van-cell-group>
       </div>
     </van-index-bar>
+
+    <van-empty
+      v-if="!indexList.length"
+      :description="emptyText"
+    />
   </div>
 </template>
 
 <script>
 import {
-  Search, IndexBar, IndexAnchor, Cell, CellGroup
+  Search, IndexBar, IndexAnchor, Cell, CellGroup, Empty,
 } from 'vant';
 
-/**
- * 数据过多时，搜索组件，当前数据固定
- */
 export default {
-  name: 'SearchList',
+  name: 'SearchListStatic',
 
   components: {
     [Search.name]: Search,
@@ -55,13 +72,15 @@ export default {
     [IndexAnchor.name]: IndexAnchor,
     [Cell.name]: Cell,
     [CellGroup.name]: CellGroup,
+    [Empty.name]: Empty,
   },
 
   props: {
-    filter: {
+    indexBar: {
       type: Boolean,
       default: true,
     },
+    searchSticky: Boolean,
     list: {
       type: Array,
       default: () => ([]),
@@ -74,9 +93,13 @@ export default {
       type: String,
       default: 'value',
     },
-    indexKey: {
+    indexBarKey: {
       type: [String, Function],
       default: 'key',
+    },
+    emptyText: {
+      type: String,
+      default: '暂无数据',
     },
   },
 
@@ -102,18 +125,22 @@ export default {
     listDeconstruct(text) {
       const list = text ? this.list.filter((item) => item[this.listLabel].indexOf(text) > -1) : this.list;
       const result = {};
-      list.forEach((item) => {
-        let key;
-        if (typeof this.indexKey === 'string') {
-          key = item[this.indexKey];
-        } else {
-          key = this.indexKey(item, this);
-        }
-        (result[key] || (result[key] = [])).push(item);
-      });
+      if (this.indexBar) {
+        list.forEach((item) => {
+          let key;
+          if (typeof this.indexBarKey === 'string') {
+            key = item[this.indexBarKey];
+          } else {
+            key = this.indexBarKey(item, this);
+          }
+          (result[key] || (result[key] = [])).push(item);
+        });
 
-      this.indexList = Object.keys(result);
-      this.contentMap = result;
+        this.indexList = Object.keys(result);
+        this.contentMap = result;
+      } else {
+        this.indexList = list;
+      }
     },
 
     onSearch() {
@@ -127,14 +154,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.index-filter {
-  padding-top: 54px;
+.search-list {
+  padding: 0 8px;
+  background: #fafafa;
+  &_sticky {
+    padding-top: 54px;
+  }
+  :deep(.van-empty) {
+    background: #fff;
+  }
 }
-.filter-wrap {
+.search-sticky {
   position: fixed;
   left: 0;
   top: 0;
   width: 100%;
-  z-index: 9;
+  z-index: 2;
 }
 </style>

@@ -3,7 +3,7 @@
     <van-cell title="确定结果">
       {{ result }}
     </van-cell>
-    <index-bar-search
+    <search-list-static
       :list="list"
       list-label="areaName"
       list-value="areaCode"
@@ -15,7 +15,7 @@
 
 <script>
 import { Cell, List, Button, Field } from 'vant';
-import IndexBarSearch from '../index';
+import SearchListStatic from '../index';
 import LIST from './list';
 
 export default {
@@ -25,7 +25,7 @@ export default {
     [Field.name]: Field,
     [List.name]: List,
     [Button.name]: Button,
-    IndexBarSearch,
+    SearchListStatic,
   },
   data() {
     return {
