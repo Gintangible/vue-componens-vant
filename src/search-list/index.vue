@@ -12,8 +12,10 @@
         @search="onSearch"
       >
         <template #action>
-          <slot name="action" @click="onCancel">
-            取消
+          <slot name="action">
+            <div @click="onCancel">
+              取消
+            </div>
           </slot>
         </template>
       </van-search>

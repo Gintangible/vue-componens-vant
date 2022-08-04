@@ -62,6 +62,10 @@ module.exports = {
             title: '枚举多选控件',
           },
           {
+            path: 'seach-field',
+            title: '搜索控件',
+          },
+          {
             path: 'search-list',
             title: '搜索展示',
           },
