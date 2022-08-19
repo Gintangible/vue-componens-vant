@@ -1,34 +1,41 @@
 {
-  "name": "@gintangible/components-vant",
+  "name": "@gintangible/vant-vue3",
   "version": "1.0.0",
   "description": "基于vant的通用组件",
   "author": "gintangible@163.com",
   "license": "MIT",
-  "main": "lib/index.js",
+  "main": "lib/vant3-components.js",
   "module": "es/index.js",
+  "style": "lib/index.css",
+  "typings": "lib/index.d.ts",
   "files": [
     "es",
     "lib"
   ],
   "scripts": {
     "dev": "vant-cli dev",
-    "test": "vant-cli test",
     "lint": "vant-cli lint",
+    "test": "vant-cli test",
     "build": "vant-cli build",
-    "release": "vant-cli release",
-    "test:coverage": "open test/coverage/index.html",
-    "build-site": "vant-cli build-site && gh-pages -d site"
+    "build:site": "vant-cli build-site",
+    "release": "vant-cli release --tag next",
+    "release:site": "pnpm build:site && npx gh-pages -d site-dist",
+    "test:watch": "vant-cli test --watch",
+    "test:coverage": "open test/coverage/index.html"
   },
   "peerDependencies": {
-    "vue": "^2.6.11",
-    "vue-template-compiler": "^2.6.11"
+    "vue": "^3.0.0"
   },
   "devDependencies": {
-    "@vant/cli": "2.11.7",
-    "babel-plugin-import": "^1.13.0",
-    "vant": "^2.12.23",
-    "vue": "^2.6.11",
-    "vue-template-compiler": "^2.6.11"
+    "@vant/cli": "^4.0.0",
+    "sass": "^1.49.7",
+    "vue": "^3.0.0"
+  },
+  "nano-staged": {
+    "*.md": "prettier --write",
+    "*.{ts,tsx,js,vue,less,scss}": "prettier --write",
+    "*.{ts,tsx,js,vue}": "eslint --fix",
+    "*.{vue,css,less,scss}": "stylelint --fix"
   },
   "eslintConfig": {
     "root": true,
@@ -45,12 +52,13 @@
     "singleQuote": true
   },
   "browserslist": [
-    "Android >= 4.0",
-    "iOS >= 8"
+    "Chrome >= 51",
+    "iOS >= 10"
   ],
   "dependencies": {
     "dayjs": "^1.10.6",
-    "lodash": "^4.17.21",
-    "signature_pad": "^3.0.0-beta.4"
+    "lodash-es": "^4.17.21",
+    "signature_pad": "^3.0.0-beta.4",
+    "vant": "^3.5.4"
   }
 }

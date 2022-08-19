@@ -1,65 +1,42 @@
 <template>
-  <van-cell
+  <cell
     :title="title"
     :label="label"
     :center="center"
   >
     <template #right-icon>
       <van-switch
-        v-model="model"
+        v-model="visible"
         size="24"
         :disabled="disabled"
         @change="onChange"
       />
     </template>
-  </van-cell>
+  </cell>
 </template>
 
-<script>
-import { Cell, Switch } from 'vant';
+<script setup>
+import { ref, toRefs, watch } from 'vue';
+import { Cell, Switch as VanSwitch } from 'vant';
 
-export default {
-  name: 'SwitchCell',
+const emit = defineEmits(['update:modelValue', 'change']);
 
-  components: {
-    [Cell.name]: Cell,
-    [Switch.name]: Switch,
-  },
+const props = defineProps({
+  value: Boolean,
+  title: String,
+  label: String,
+  center: Boolean,
+  disabled: Boolean,
+});
+const visible = ref(false);
+const checked = toRefs(props).value;
 
-  props: {
-    value: {
-      type: Boolean,
-      required: true,
-    },
-    title: {
-      type: String,
-      default: '',
-    },
-    label: {
-      type: String,
-      default: '',
-    },
-    center: Boolean,
-    disabled: Boolean,
-  },
-  data() {
-    return {
-      model: false,
-    };
-  },
-  watch: {
-    value(newValue) {
-      this.model = newValue;
-    },
-  },
-  mounted() {
-    this.model = this.value;
-  },
-  methods: {
-    onChange(newValue) {
-      this.$emit('input', newValue);
-      this.$emit('change', newValue);
-    },
-  },
-};
+watch(checked, (val) => {
+  visible.value = val;
+})
+
+function onChange(val) {
+  emit('update:modelValue', val);
+  emit('change', val);
+}
 </script>
