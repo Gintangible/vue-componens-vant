@@ -7,7 +7,6 @@
       :send-button-text="sendButtonText"
       :resend-button-text="resendButtonText"
       :resend-timeout="Number(resendTimeout)"
-      :count-down-color="countDownColor"
       @send="onSend"
       @change="onChange"
     />
@@ -58,50 +57,33 @@
   </div>
 </template>
 
-<script>
-import { Form, Field, List, Cell } from 'vant';
-import VerifyCodeField from '../index';
+<script setup>
+import { ref } from 'vue';
+import { Form as VanForm, Field as VanField, List as VanList, Cell as VanCell } from 'vant';
+import VerifyCodeField from '../index.vue';
 
-/**
- * {@link VerifyCodeField}的使用例子。
- */
-export default {
-  name: 'VerifyCodeFieldDemo',
-  components: {
-    [Form.name]: Form,
-    [Field.name]: Field,
-    [List.name]: List,
-    [Cell.name]: Cell,
-    [VerifyCodeField.name]: VerifyCodeField,
-  },
-  data() {
-    return {
-      code: '',
-      label: '短信验证码',
-      placeholder: '请填写短信验证码',
-      sendButtonText: '发送验证码',
-      resendButtonText: '重新发送验证码',
-      countDownColor: '#fff',
-      resendTimeout: 60000,
-      count: 0,
-      events: [],
-    };
-  },
-  methods: {
-    onChange(value) {
-      this.events.unshift({
-        order: ++this.count,
-        name: 'change',
-        param: value,
-      });
-    },
-    onSend() {
-      this.events.unshift({
-        order: ++this.count,
-        name: 'send',
-        param: '',
-      });
-    },
-  },
-};
+const code = ref('');
+const label = ref('短信验证码');
+const placeholder = ref('请填写短信验证码');
+const sendButtonText = ref('发送验证码');
+const resendButtonText = ref('重新发送验证码');
+const resendTimeout = ref(10000);
+const count = ref(0);
+const events = ref([]);
+
+function onChange(value) {
+  events.value.unshift({
+    order: ++count.value,
+    name: 'change',
+    param: value,
+  });
+}
+
+function onSend() {
+  events.value.unshift({
+    order: ++count.value,
+    name: 'send',
+    param: '',
+  });
+}
 </script>

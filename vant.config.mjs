@@ -33,6 +33,10 @@ export default {
             path: 'switch-cell',
             title: '组合Cell和Switch的开关控件',
           },
+          {
+            path: 'verify-code-field',
+            title: '短信验证码输入框控件',
+          },
         ],
       },
       // 其他功能的组件库
