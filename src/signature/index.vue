@@ -44,130 +44,127 @@
   </div>
 </template>
 
-<script>
-import { Button, Image as VanImage } from 'vant';
-// https://www.npmjs.com/package/signature_pad
+<script setup>
+import { ref, computed, watch, reactive, onMounted } from 'vue';
+import { Button as VanButton, Image as VanImage, Dialog } from 'vant';
 import SignaturePad from 'signature_pad';
-import alert from '../utils/alert';
 
-export default {
-  name: 'Signature',
+const emit = defineEmits([
+  'clear',
+  'confirm',
+]);
 
-  components: {
-    [Button.name]: Button,
-    [VanImage.name]: VanImage,
+const props = defineProps({
+  name: {
+    type: String,
+    default: '',
+  },
+  // 签名的title
+  title: {
+    type: String,
+    default: '签名区域',
+  },
+  // 已有签名
+  signUrl: String,
+  readonly: Boolean,
+  height: {
+    type: [String, Number],
+    default: '150',
+  },
+  // 签名板背景色
+  background: {
+    type: String,
+    default: '#dedede',
+  },
+  // 清屏的文字内容
+  clearText: {
+    type: String,
+    default: '重签',
+  },
+  // 确定的文字内容
+  confirmText: {
+    type: String,
+    default: '确定'
+  },
+  // 提示文字
+  tipText: {
+    type: String,
+    default: '请使用正楷清晰地写上个人签名',
   },
 
-  props: {
-    name: {
-      type: String,
-      default: '',
-    },
-    // 签名的title
-    title: {
-      type: String,
-      default: '签名区域',
-    },
-    // 已有签名
-    signUrl: String,
-    readonly: Boolean,
-    height: {
-      type: [String, Number],
-      default: '150',
-    },
-    // 签名板背景色
-    background: {
-      type: String,
-      default: '#dedede',
-    },
-    // 清屏的文字内容
-    clearText: {
-      type: String,
-      default: '重签',
-    },
-    // 确定的文字内容
-    confirmText: {
-      type: String,
-      default: '确定'
-    },
-    // 提示文字
-    tipText: {
-      type: String,
-      default: '请使用正楷清晰地写上个人签名',
-    },
+  // eslint-disable-next-line
+  beforeRemove: Function,
+});
+const state = reactive({
+  signaturePad: {},
+})
+// const signaturePad = ref({});
+const signSrc = ref('');            // 已有签名地址
+const canvas = ref(null);
 
-    // eslint-disable-next-line
-    beforeRemove: Function,
-  },
-  data() {
-    return {
-      signaturePad: null,
-      signSrc: '',            // 已有签名地址
-    };
-  },
-  computed: {
-    canvasStyle() {
-      return `height: ${this.height}px; background: ${this.background};`;
-    },
-  },
+// 画布大小
+const canvasStyle = computed(() => {
+  return `height: ${props.height}px; background: ${props.background};`;
+})
 
-  watch: {
-    signUrl(val) {
-      if (val) {
-        this.signSrc = val;
-      }
-    }
-  },
-  mounted() {
-    const { canvas } = this.$refs;
-    this.resizeCanvas();
-    this.signaturePad = new SignaturePad(canvas);
-    this.signSrc = this.signUrl;
-  },
-  methods: {
-    // 清空签名
-    handleRemove() {
-      if (!this.beforeRemove) {
-        return this.clear();
-      }
-      const beforeRemove = this.beforeRemove(this.name);
-      if (beforeRemove && beforeRemove.then) {
-        beforeRemove.then(() => {
-          this.clear();
-        });
-      }
-    },
+watch(() => props.signUrl, (val) => {
+  if (val) {
+    signSrc.value = val;
+  }
+})
 
-    clear() {
-      this.signSrc = '';
-      this.signaturePad.clear();
-      this.$emit('clear', this.name);
-    },
+onMounted(() => {
+  resizeCanvas();
+  state.signaturePad = new SignaturePad(canvas.value);
+  signSrc.value = props.signUrl;
+});
 
-    // 完成签名
-    confirm() {
-      if (this.signSrc) {
-        alert.show('提示', '请删除之前的签名');
-        return;
-      }
-      if (this.signaturePad.isEmpty()) {
-        alert.show('提示', '签名不能为空');
-        return;
-      }
-      const IMAGE_URL = this.signaturePad.toDataURL();
-      this.$emit('confirm', IMAGE_URL, this.name);
-    },
+// 画布区域自适应
+function resizeCanvas() {
+  const ratio = Math.max(window.devicePixelRatio || 1, 1); // 清除画布
+  canvas.value.width = canvas.value.offsetWidth * ratio;
+  canvas.value.height = canvas.value.offsetHeight * ratio;
+  canvas.value.getContext('2d').scale(ratio, ratio);
+}
 
-    // 画布区域自适应
-    resizeCanvas() {
-      const ratio = Math.max(window.devicePixelRatio || 1, 1); // 清除画布
-      const { canvas } = this.$refs;
-      canvas.width = canvas.offsetWidth * ratio;
-      canvas.height = canvas.offsetHeight * ratio;
-      canvas.getContext('2d').scale(ratio, ratio);
-    }
-  },
-};
+// 清空签名
+function handleRemove() {
+  if (!props.beforeRemove) {
+    return clear();
+  }
+  const beforeRemove = props.beforeRemove(props.name);
+  if (beforeRemove && beforeRemove.then) {
+    beforeRemove.then(() => {
+      clear();
+    });
+  }
+}
+
+function clear() {
+  signSrc.value = '';
+  state.signaturePad.clear();
+  emit('clear', props.name);
+}
+
+// 完成签名
+function confirm() {
+  if (signSrc.value) {
+    Dialog.alert({
+      title: '提示',
+      message: '请删除之前的签名'
+    });
+    return;
+  }
+  if (state.signaturePad.isEmpty()) {
+    Dialog.alert({
+      title: '提示',
+      message: '签名不能为空'
+    });
+    return;
+  }
+  const IMAGE_URL = state.signaturePad.toDataURL();
+  emit('confirm', IMAGE_URL, props.name);
+}
 </script>
 
 <style lang="less" scoped>

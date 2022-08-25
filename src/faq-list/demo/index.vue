@@ -18,21 +18,10 @@
     />
   </div>
 </template>
-<script>
-import FaqList from '../index';
-import FAQS from './faqs';
+<script setup>
+import { ref } from 'vue';
+import FaqList from '../index.vue';
+import FAQS from './faqs.js';
 
-// FaqList 的使用例子。
-
-export default {
-  name: 'faq-list-demo',
-  components: {
-    [FaqList.name]: FaqList,
-  },
-  data() {
-    return {
-      faqs: FAQS,
-    };
-  },
-};
+const faqs = ref(FAQS);
 </script>

@@ -1,0 +1,223 @@
+<template>
+  <div class="signature-container">
+    <div slot="title" class="signature-title">
+      {{ title }}
+    </div>
+    <div
+      class="signature-content"
+      :style="canvasStyle"
+    >
+      <canvas
+        ref="canvas"
+        class="signature-canvas"
+      />
+      <van-image
+        v-if="signSrc || readonly"
+        :src="signSrc"
+        fit="fill"
+        class="signature-blank"
+      />
+    </div>
+    <div v-if="tipText" class="signature-hint">
+      {{ tipText }}
+    </div>
+    <div
+      v-if="!readonly"
+      class="signature-btn-group"
+    >
+      <van-button
+        :text="clearText"
+        size="mini"
+        round
+        plain
+        color="#007bf6"
+        @click="handleRemove"
+      />
+      <van-button
+        :text="confirmText"
+        round
+        size="mini"
+        color="#007bf6"
+        @click="confirm"
+      />
+    </div>
+  </div>
+</template>
+
+<script>
+import { Button, Image as VanImage } from 'vant';
+// https://www.npmjs.com/package/signature_pad
+import SignaturePad from 'signature_pad';
+import alert from '../utils/alert';
+
+export default {
+  name: 'Signature',
+
+  components: {
+    [Button.name]: Button,
+    [VanImage.name]: VanImage,
+  },
+
+  props: {
+    name: {
+      type: String,
+      default: '',
+    },
+    // 签名的title
+    title: {
+      type: String,
+      default: '签名区域',
+    },
+    // 已有签名
+    signUrl: String,
+    readonly: Boolean,
+    height: {
+      type: [String, Number],
+      default: '150',
+    },
+    // 签名板背景色
+    background: {
+      type: String,
+      default: '#dedede',
+    },
+    // 清屏的文字内容
+    clearText: {
+      type: String,
+      default: '重签',
+    },
+    // 确定的文字内容
+    confirmText: {
+      type: String,
+      default: '确定'
+    },
+    // 提示文字
+    tipText: {
+      type: String,
+      default: '请使用正楷清晰地写上个人签名',
+    },
+
+    // eslint-disable-next-line
+    beforeRemove: Function,
+  },
+  data() {
+    return {
+      signaturePad: null,
+      signSrc: '',            // 已有签名地址
+    };
+  },
+  computed: {
+    canvasStyle() {
+      return `height: ${this.height}px; background: ${this.background};`;
+    },
+  },
+
+  watch: {
+    signUrl(val) {
+      if (val) {
+        this.signSrc = val;
+      }
+    }
+  },
+  mounted() {
+    const { canvas } = this.$refs;
+    this.resizeCanvas();
+    this.signaturePad = new SignaturePad(canvas);
+    this.signSrc = this.signUrl;
+  },
+  methods: {
+    // 清空签名
+    handleRemove() {
+      if (!this.beforeRemove) {
+        return this.clear();
+      }
+      const beforeRemove = this.beforeRemove(this.name);
+      if (beforeRemove && beforeRemove.then) {
+        beforeRemove.then(() => {
+          this.clear();
+        });
+      }
+    },
+
+    clear() {
+      this.signSrc = '';
+      this.signaturePad.clear();
+      this.$emit('clear', this.name);
+    },
+
+    // 完成签名
+    confirm() {
+      if (this.signSrc) {
+        alert.show('提示', '请删除之前的签名');
+        return;
+      }
+      if (this.signaturePad.isEmpty()) {
+        alert.show('提示', '签名不能为空');
+        return;
+      }
+      const IMAGE_URL = this.signaturePad.toDataURL();
+      this.$emit('confirm', IMAGE_URL, this.name);
+    },
+
+    // 画布区域自适应
+    resizeCanvas() {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1); // 清除画布
+      const { canvas } = this.$refs;
+      canvas.width = canvas.offsetWidth * ratio;
+      canvas.height = canvas.offsetHeight * ratio;
+      canvas.getContext('2d').scale(ratio, ratio);
+    }
+  },
+};
+</script>
+
+<style lang="less" scoped>
+.signature-container {
+  padding: 10px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.signature-title {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.signature-content {
+  position: relative;
+  border: 1px solid #f4f4f4;
+  border-radius: 4px;
+  height: 160px;
+  overflow: hidden;
+  .signature-canvas {
+    width: 100%;
+    height: 100%;
+  }
+  .signature-blank {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.signature-hint {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+}
+
+.signature-btn-group {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  .van-button {
+    padding: 0 16px;
+  }
+  .van-button + .van-button {
+    margin-left: 30px;
+  }
+}
+</style>

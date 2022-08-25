@@ -10,5 +10,5 @@
 import Vue from 'vue';
 import { SwitchCell } from '@gintangible/vant-vue3';
 
-Vue.use(DemoButton);
+Vue.use(SwitchCell);
 ```

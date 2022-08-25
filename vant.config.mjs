@@ -35,6 +35,20 @@ export default {
           },
         ],
       },
+      // 其他功能的组件库
+      {
+        title: '业务组件',
+        items: [
+          {
+            path: 'faq-list',
+            title: '产品常见问题列表控件',
+          },
+          {
+            path: 'signature',
+            title: '电子签名控件',
+          },
+        ],
+      },
     ],
   },
 };

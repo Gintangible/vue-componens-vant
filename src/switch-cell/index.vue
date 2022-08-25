@@ -19,7 +19,10 @@
 import { ref, toRefs, watch } from 'vue';
 import { Cell, Switch as VanSwitch } from 'vant';
 
-const emit = defineEmits(['update:modelValue', 'change']);
+const emit = defineEmits([
+  'update:modelValue',
+  'change',
+]);
 
 const props = defineProps({
   value: Boolean,
