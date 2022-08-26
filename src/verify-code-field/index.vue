@@ -14,9 +14,13 @@
         :disabled="showCountDown"
         @click="onClickSend"
       >
-        <template v-if="showCountDown">
-          {{ countDownTime }} 秒
-        </template>
+        <count-down
+          v-if="showCountDown"
+          :time="resendTimeout"
+          :style="{color: countDownColor}"
+          format="ss秒"
+          @finish="onCountDownFinish"
+        />
         <template v-else>
           {{ buttonText }}
         </template>
@@ -28,7 +32,6 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { Field as VanField, Button as VanButton, CountDown } from 'vant';
-import { useCountDown } from '@vant/use';
 
 const emit = defineEmits([
   'send',
@@ -53,6 +56,10 @@ const props = defineProps({
     type: String,
     default: '重新发送验证码',
   },
+  countDownColor: {
+    type: String,
+    default: '#fff',
+  },
   resendTimeout: {
     type: Number,
     default: 60000,
@@ -62,26 +69,19 @@ const props = defineProps({
 const buttonText = ref(props.sendButtonText);
 const code = ref('');
 const showCountDown = ref(false);
-const countDownTime = ref(0);
-const countDown = useCountDown({
-  time: props.resendTimeout,
-  onChange: (time) => {
-    countDownTime.value = time.seconds;
-  },
-  onFinish: () => {
-    buttonText.value = props.resendButtonText;
-    showCountDown.value = false;
-  }
-});
 
 watch(() => props.value, (newValue) => {
   code.value = newValue;
 });
 
 function onClickSend() {
-  emit('send');
-  countDown.start();
   showCountDown.value = true;
+  emit('send');
+}
+
+function onCountDownFinish() {
+  buttonText.value = props.resendButtonText;
+  showCountDown.value = false;
 }
 
 function onBlur() {

@@ -8,7 +8,7 @@
       :resend-button-text="resendButtonText"
       :resend-timeout="Number(resendTimeout)"
       @send="onSend"
-      @change="onChange"
+      @blur="onChange"
     />
     <van-field
       v-model="code"
