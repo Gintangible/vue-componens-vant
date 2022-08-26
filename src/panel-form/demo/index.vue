@@ -1,24 +1,25 @@
 <template>
   <div>
-    <panel-form ref="form">
-      <van-field v-model.trim="form.name" name="name" label="姓 名" required />
-      <van-field v-model.trim="form.mobile" name="mobile" label="手机号码" required />
+    <panel-form ref="panelForm">
+      <van-field v-model.trim="data.name" name="name" label="姓 名" required />
+      <van-field v-model.trim="data.mobile" name="mobile" label="手机号码" required />
     </panel-form>
     <div class="form-content">
       {{ formEvents }}
     </div>
+
     <van-button
-      type="info"
+      type="primary"
       block
       size="small"
       text="提交"
       class="form-button"
-      @click="panelForm"
+      @click="panelFormValidate"
     />
 
     <panel-form v-for="(item, index) in panels"
       :key="index"
-      :index="index + 1"
+      :index="index"
       :title="item.title"
       :closeable="item.closeable"
       class="panel-form"
@@ -45,64 +46,59 @@
   </div>
 </template>
 
-<script>
-import { Cell, List, Button, Field } from 'vant';
-import PanelForm from '../index';
+<script setup>
+import { ref } from 'vue';
+import {
+  Cell as VanCell,
+  List as VanList,
+  Button as VanButton,
+  Field as VanField,
+} from 'vant';
+import PanelForm from '../index.vue';
 
-export default {
-  name: 'PanelDemo',
-  components: {
-    [Cell.name]: Cell,
-    [Field.name]: Field,
-    [List.name]: List,
-    [Button.name]: Button,
-    [PanelForm.name]: PanelForm,
-  },
-  data() {
-    return {
-      form: {
-        name: '',
-        mobile: ''
-      },
-      formEvents: {},
-      panels: [{
-        title: '第1个表单',
-      },
-      {
-        closeable: true,
-      },
-      {
-        title: '第3个表单',
-        closeable: true,
-      }],
-      count: 0,
-      events: [],
-    };
-  },
-  methods: {
-    onClose(index) {
-      this.events.unshift({
-        order: ++this.count,
-        name: 'close',
-        param: `表单${index}关闭`,
-      });
-    },
+const data = ref({
+  name: '',
+  mobile: '',
+});
 
-    panelForm(){
-      this.$refs.form.validate().then((values) => {
-        this.formEvents = {
-          event: 'sumit',
-          values,
-        }
-      }).catch((error) => {
-        this.formEvents = {
-          event: 'failed',
-          error,
-        }
-      })
-    },
-  },
-};
+const formEvents = ref({});
+const panels = ref([{
+  title: '第1个表单',
+},
+{
+  closeable: true,
+},
+{
+  title: '第3个表单',
+  closeable: true,
+}]);
+
+const count = ref(0);
+const events = ref([]);
+const panelForm = ref(null);
+
+function onClose(index) {
+  events.value.unshift({
+    order: ++count.value,
+    name: 'close',
+    param: `表单${index}关闭`,
+  });
+  panels.value.splice(index, 1);
+}
+
+function panelFormValidate(){
+  panelForm.value.validate().then((values) => {
+    formEvents.value = {
+      event: 'submit',
+      values,
+    }
+  }).catch((error) => {
+    formEvents.value = {
+      event: 'failed',
+      error,
+    }
+  })
+}
 </script>
 
 <style lang="less" scoped>

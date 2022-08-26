@@ -1,5 +1,5 @@
 <template>
-  <van-form v-if="visible" ref="form" class="panel-form">
+  <van-form ref="form" class="panel-form">
     <van-cell
       v-if="title || closeable"
       :title="title || ' '"
@@ -19,53 +19,47 @@
   </van-form>
 </template>
 
-<script>
-import { Form, Cell, Icon } from 'vant';
+<script setup>
+import { ref } from 'vue';
+import {
+  Form as VanForm,
+  Cell as VanCell,
+  Icon as VanIcon,
+} from 'vant';
 
-// 面板。
-export default {
-  name: 'PanelForm',
+const emit = defineEmits([
+  'close',
+]);
 
-  components: {
-    [Form.name]: Form,
-    [Cell.name]: Cell,
-    [Icon.name]: Icon,
+defineExpose({
+  validate,
+});
+
+const props = defineProps({
+  index: {
+    type: Number,
+    default: 0,
   },
+  // 表单标题
+  title: String,
+  // 表单是否可关闭
+  closeable: Boolean,
+});
 
-  props: {
-    // 表单的编号索引
-    index: {
-      type: Number,
-      default: 0,
-    },
-    // 表单标题
-    title: String,
-    // 表单是否可关闭
-    closeable: Boolean,
-  },
+const form = ref(null);
 
-  data() {
-    return {
-      visible: true,
-    }
-  },
+function onClose() {
+  emit('close', props.index);
+}
 
-  methods: {
-    onClose() {
-      this.$emit('close', this.index);
-      this.visible = false;
-    },
-
-    validate() {
-      return this.$refs.form.validate().then(() => {
-        const values = this.$refs.form.getValues();
-        return Promise.resolve(values);
-      }).catch((res) => {
-        return Promise.reject(res);
-      })
-    },
-  },
-};
+function validate() {
+  return form.value.validate().then(() => {
+    const values = form.value.getValues();
+    return Promise.resolve(values);
+  }).catch((res) => {
+    return Promise.reject(res);
+  })
+}
 </script>
 
 <style lang="less">

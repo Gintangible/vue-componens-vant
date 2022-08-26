@@ -98,7 +98,6 @@ const props = defineProps({
 const state = reactive({
   signaturePad: {},
 })
-// const signaturePad = ref({});
 const signSrc = ref('');            // 已有签名地址
 const canvas = ref(null);
 
