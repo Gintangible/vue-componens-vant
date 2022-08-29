@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <van-form>
     <enum-select
       v-model="enumStr"
       label="单列数据"
@@ -17,9 +17,9 @@
     <enum-select
       v-model="type"
       label="证件类型"
+      :rules="rules"
       :columns="columns"
       :disabled="disabled"
-      :rules="rules"
       @confirm="onConfirm"
       @change="onChange"
     />
@@ -61,11 +61,12 @@
         :value="JSON.stringify(e.param)"
       />
     </van-list>
-  </div>
+  </van-form>
 </template>
 <script setup>
 import { ref } from 'vue';
 import {
+  Form as VanForm,
   Field as VanField,
   List as VanList,
   Cell as VanCell,

@@ -13,7 +13,7 @@
       @click="onClick"
     />
     <van-popup
-      v-model="showPopup"
+      v-model:show="showPopup"
       position="bottom"
     >
       <div class="van-picker__toolbar">
@@ -56,15 +56,14 @@
         >
           <van-cell-group>
             <van-cell
-              v-for="(item, index) in enumColumns"
+              v-for="(item) in enumColumns"
               :key="item[checkValue]"
               clickable
               :title="item[checkLabel]"
-              @click="toggle(index)"
             >
               <template #right-icon>
                 <van-checkbox
-                  ref="checkboxes"
+                  ref="checkbox"
                   :shape="checkboxShape"
                   :disabled="item.disabled"
                   :name="item[checkValue]"
@@ -78,199 +77,175 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, watch } from 'vue';
 import { cloneDeep } from 'lodash';
 import {
-  Cell,
-  CellGroup,
-  Popup,
-  Checkbox,
-  CheckboxGroup,
-  Field,
+  Cell as VanCell,
+  CellGroup as VanCellGroup,
+  Popup as VanPopup,
+  Checkbox as VanCheckbox,
+  CheckboxGroup as VanCheckboxGroup,
+  Field as VanField,
   Toast,
 } from 'vant';
 
-export default {
-  name: 'EnumSelectCheckbox',
+const emit = defineEmits([
+  'update:modelValue',
+  'cancel',
+  'confirm',
+  'change',
+]);
 
-  components: {
-    [Field.name]: Field,
-    [Cell.name]: Cell,
-    [CellGroup.name]: CellGroup,
-    [Popup.name]: Popup,
-    [Checkbox.name]: Checkbox,
-    [CheckboxGroup.name]: CheckboxGroup,
-    [Toast.name]: Toast,
+const props = defineProps({
+  name: String,
+  modelValue: {
+    type: Array,
+    default() {
+      return [];
+    },
   },
-
-  props: {
-    name: String,
-    value: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
-    columns: {
-      type: Array,
-      default: () => ([]),
-    },
-    label: {
-      type: String,
-      default: '下拉多选'
-    },
-    // 是否显示全选按钮
-    selectAllShow: {
-      type: Boolean,
-      default: true,
-    },
-    placeholder: String,
-    // 下拉前函数
-    beforeSelect: Function,
-    isLink: Boolean,
-    disabled: Boolean,
-    // checkbox 的形状
-    checkboxShape: {
-      type: String,
-      default: 'square',
-    },
-    checkLabel: {
-      type: String,
-      default: 'label',
-    },
-    checkValue: {
-      type: String,
-      default: 'value',
-    },
-    // 显示内容分割符号
-    textSeparator: {
-      type: String,
-      default: ' / ',
-    },
-    formatter: Function,
+  columns: {
+    type: Array,
+    default: () => ([]),
   },
-
-  data() {
-    return {
-      text: '',
-      showPopup: false,
-      checkboxValue: [],
-      checkedAll: false,
-    };
+  label: {
+    type: String,
+    default: '下拉多选'
   },
+  // 是否显示全选按钮
+  selectAllShow: {
+    type: Boolean,
+    default: true,
+  },
+  placeholder: String,
+  // 下拉前函数
+  beforeSelect: Function,
+  isLink: Boolean,
+  disabled: Boolean,
+  // checkbox 的形状
+  checkboxShape: {
+    type: String,
+    default: 'square',
+  },
+  checkLabel: {
+    type: String,
+    default: 'label',
+  },
+  checkValue: {
+    type: String,
+    default: 'value',
+  },
+  // 显示内容分割符号
+  textSeparator: {
+    type: String,
+    default: ' / ',
+  },
+  formatter: Function,
+});
 
-  computed: {
-    fieldPlaceholder() {
-      return this.placeholder || `请输入${this.label}`;
-    },
-    fieldRules() {
-      let rules = [];
-      if (this.required) {
-        rules = [{
-          required: true,
-          message: this.fieldPlaceholder,
-        }];
+const text = ref('');
+const showPopup = ref(false);
+const checkboxValue = ref([]);
+const checkedAll = ref(false);
+const checkboxGroup = ref(null);
+const checkbox = ref(null);
+
+const fieldPlaceholder = computed(() => {
+  return props.placeholder || `请输入${props.label}`;
+});
+const fieldRules = computed(() => {
+  let rules = [];
+  if (props.required) {
+    rules = [{
+      required: true,
+      message: fieldPlaceholder.value,
+    }];
+  }
+  return rules.concat(props.rules || []);
+});
+const enumColumns = computed(() => {
+  if (typeof props.columns[0] === 'string') {
+    const columns = props.columns.map((item, index) => {
+      return {
+        [props.checkLabel]: item,
+        [props.checkValue]: index,
       }
-      return rules.concat(this.rules || []);
-    },
-    enumColumns() {
-      if (typeof this.columns[0] === 'string') {
-        const columns = this.columns.map((item, index) => {
-          return {
-            [this.checkLabel]: item,
-            [this.checkValue]: index,
-          }
-        })
-        return columns;
-      }
-      return this.columns;
-    },
-  },
+    })
+    return columns;
+  }
+  return props.columns;
+});
 
-  watch: {
-    value: {
-      immediate: true,
-      handler() {
-        this.checkboxValue = cloneDeep(this.value);
-        this.getTextShow();
-      },
-    },
-    columns: {
-      immediate: true,
-      handler() {
-        this.getTextShow();
-      },
-    },
-    checkboxValue: {
-      immediate: true,
-      handler(val) {
-        if (val.length && val.length === this.columns.length) {
-          this.checkedAll = true;
-        } else {
-          this.checkedAll = false;
-        }
-      },
-    },
-  },
+watch(() => props.modelValue, (newValue) => {
+  checkboxValue.value = cloneDeep(newValue);
+  setText();
+}, { immediate: true });
+watch(() => props.columns, (newValue) => {
+  setText();
+}, { deep: true });
+watch(checkboxValue, (val) => {
+  if (val.length && val.length === props.columns.length) {
+    checkedAll.value = true;
+  } else {
+    checkedAll.value = false;
+  }
+}, { deimmediateep: true });
 
-  methods: {
-    onClick() {
-      if (this.disabled) {
-        Toast(`${this.label}不可更改`);
-        return;
-      }
-      if (this.beforeSelect) {
-        this.beforeSelect().then(() => {
-          this.showPopup = true;
-        });
-        return;
-      }
-      this.showPopup = true;
-    },
+function onClick() {
+  if (props.disabled) {
+    Toast(`${props.label}不可更改`);
+    return;
+  }
+  if (props.beforeSelect) {
+    props.beforeSelect().then(() => {
+      showPopup.value = true;
+    });
+    return;
+  }
+  showPopup.value = true;
+}
 
-    getData() {
-      const selected = this.columns.filter((item) => this.checkboxValue.includes(item[this.checkValue]));
-      return cloneDeep(selected);
-    },
+function getData() {
+  const selected = enumColumns.value.filter((item) => {
+    return checkboxValue.value.includes(item[props.checkValue])
+  });
+  return cloneDeep(selected);
+}
 
-    getTextShow() {
-      const checked = this.getData();
-      if (this.formatter) {
-        this.text = this.formatter(checked);
-        return;
-      }
-      const textArray = [];
-      checked.forEach((item) => {
-        textArray.push(item[this.checkLabel]);
-      });
-      this.text = textArray.join(this.textSeparator);
-    },
+function setText() {
+  const checked = getData();
+  if (props.formatter) {
+    text.value = props.formatter(checked);
+    return;
+  }
+  const textArray = [];
+  checked.forEach((item) => {
+    textArray.push(item[props.checkLabel]);
+  });
+  text.value = textArray.join(props.textSeparator);
+}
 
-    onConfirm() {
-      this.showPopup = false;
-      this.getTextShow();
-      this.$emit('input', this.checkboxValue);
-      this.$emit('confirm', cloneDeep(this.checkboxValue), this.getData());
-    },
+function onConfirm() {
+  showPopup.value = false;
+  setText();
+  const checkboxList = cloneDeep(checkboxValue.value);
+  emit('update:modelValue', checkboxList);
+  emit('confirm', checkboxList, getData());
+}
 
-    change(val) {
-      this.$emit('change', val, this.getData());
-    },
+function change(val) {
+  emit('change', val, getData());
+}
 
-    cancel() {
-      this.showPopup = false;
-      this.$emit('cancel');
-    },
+function cancel() {
+  showPopup.value = false;
+  emit('cancel');
+}
 
-    toggle(index) {
-      this.$refs.checkboxes[index].toggle();
-    },
-
-    toggleAll() {
-      this.$refs.checkboxGroup.toggleAll(this.checkedAll);
-    },
-  },
-};
+function toggleAll() {
+  checkboxGroup?.value.toggleAll(checkedAll.value);
+}
 </script>
 
 <style lang="less" scoped>

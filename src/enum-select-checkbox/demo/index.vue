@@ -2,7 +2,7 @@
   <div>
     <enum-select-checkbox
       v-model="enumStr"
-      label="单列数据"
+      label="简单数据"
       :columns="['111', '222', '333']"
       :readonly="readonly"
       @confirm="onConfirm"
@@ -16,7 +16,7 @@
       v-model="type"
       label="证件类型"
       :columns="columns"
-      :readonly="readonly"
+      :disabled="readonly"
       :rules="rules"
       @confirm="onConfirm"
       @change="onChange"
@@ -39,77 +39,64 @@
     </van-list>
   </div>
 </template>
-<script>
-import { Field, List, Cell, Divider } from 'vant';
-import SwitchCell from '../../switch-cell';
-import EnumSelectCheckbox from '../index';
+
+<script setup>
+import { ref } from 'vue';
+import {
+  Field as VanField,
+  List as VanList,
+  Cell as VanCell,
+  Divider as VanDivider,
+} from 'vant';
+import SwitchCell from '../../switch-cell/index.vue';
+import EnumSelectCheckbox from '../index.vue';
 
 const CREDENTIAL_TYPES = [
   {
     label: '身份证',
     value: 'IDENTITY_CARD',
   },
-
   {
     label: '护照',
     value: 'PASSPORT',
   },
-
   {
     label: '中国人民解放军军官证',
     value: 'OFFICER_CARD',
   },
-
   {
     label: '中国人民武装警察警官证',
     value: 'POLICE_CARD',
   },
 ];
 
-//  EnumSelectCheckbox 的使用例子。
-export default {
-  name: 'EnumSelectCheckboxDemo',
-  components: {
-    [Field.name]: Field,
-    [List.name]: List,
-    [Cell.name]: Cell,
-    [SwitchCell.name]: SwitchCell,
-    [EnumSelectCheckbox.name]: EnumSelectCheckbox,
-    [Divider.name]: Divider,
+const enumStr = ref([]);
+const columns = ref(CREDENTIAL_TYPES);
+const type = ref(['IDENTITY_CARD']);
+const readonly = ref(false);
+const count = ref(0);
+const events = ref([]);
+const rules = ref([
+  {
+    required: true,
+    message: '选择身份证外提示错误',
+    trigger: 'onChange',
+    validator: (val) => val === '身份证',
   },
-  data() {
-    return {
-      enumStr: [],
-      columns: CREDENTIAL_TYPES,
-      type: ['IDENTITY_CARD'],
-      readonly: false,
-      count: 0,
-      events: [],
-      rules: [
-        {
-          required: true,
-          message: '选择身份证外提示错误',
-          trigger: 'onChange',
-          validator: (val) => val === '身份证',
-        },
-      ],
-    };
-  },
-  methods: {
-    onConfirm(item) {
-      this.events.unshift({
-        order: ++this.count,
-        name: 'confirm',
-        param: item,
-      });
-    },
-    onChange(item) {
-      this.events.unshift({
-        order: ++this.count,
-        name: 'change',
-        param: item,
-      });
-    },
-  },
-};
+]);
+
+function onConfirm(item) {
+  events.value.unshift({
+    order: ++count.value,
+    name: 'confirm',
+    param: item,
+  });
+}
+function onChange(item) {
+  events.value.unshift({
+    order: ++count.value,
+    name: 'change',
+    param: item,
+  });
+}
 </script>

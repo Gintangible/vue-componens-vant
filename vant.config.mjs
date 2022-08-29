@@ -38,6 +38,10 @@ export default {
             title: '枚举控件',
           },
           {
+            path: 'enum-select-checkbox',
+            title: '枚举多选控件',
+          },
+          {
             path: 'panel-form',
             title: 'panel-form面板',
           },
