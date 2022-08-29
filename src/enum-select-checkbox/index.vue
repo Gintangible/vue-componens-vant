@@ -229,7 +229,7 @@ export default {
     },
 
     getData() {
-      const selected = this.columns.filter((item) => this.checkboxValue.includes(item[this.checkValue]));
+      const selected = enumColumns.filter((item) => this.checkboxValue.includes(item[this.checkValue]));
       return cloneDeep(selected);
     },
 
