@@ -2,7 +2,7 @@
   <div class="enum-select">
     <van-field
       :name="name"
-      :value="text"
+      :model-value="text"
       :label="label"
       :placeholder="fieldPlaceholder"
       readonly
@@ -13,7 +13,8 @@
       @click="onClick"
     />
     <van-popup
-      v-model="showPicker"
+      v-model:show="showPicker"
+      round
       position="bottom"
     >
       <van-picker
@@ -21,199 +22,259 @@
         :columns="columns"
         :title="label"
         :default-index="defaultIndex"
-        :value-key="valueKey"
+        :columns-field-names="pickerOptions"
         :item-height="itemHeight"
-        show-toolbar
         @cancel="onCancel"
         @confirm="onConfirm"
         @change="onChange"
-      >
-        <template #default>
-          <slot />
-        </template>
-        <template #title>
-          <slot name="title" />
-        </template>
-      </van-picker>
+      />
     </van-popup>
   </div>
 </template>
-<script>
+<script setup>
+import { ref, computed, watch } from 'vue';
 import { cloneDeep } from 'lodash';
 import {
-  Field, Picker, Popup, Toast,
+  Field as VanField,
+  Picker as VanPicker,
+  Popup as VanPopup,
+  Toast,
 } from 'vant';
 import removeSpace from '../utils/removeSpace';
+import { pick } from 'vant/lib/utils';
 
-// 枚举类型下拉选择框。
-export default {
-  name: 'EnumSelect',
+const emit = defineEmits([
+  'update:modelValue',
+  'cancel',
+  'confirm',
+  'change',
+]);
 
-  components: {
-    [Field.name]: Field,
-    [Picker.name]: Picker,
-    [Popup.name]: Popup,
+const props = defineProps({
+  modelValue: {              // 当前选中的选项的数值
+    type: null,
+    required: true,
   },
-  props: {
-    value: {              // 当前选中的选项的数值
-      type: null,
+  // 是否移除lable中间的空格，placeholder 与 只读点击时有效
+  removeSpace: {
+    type: Boolean,
+    default: true,
+  },
+  readonly: Boolean,
+  // 只读时点击反馈
+  reaonlyToast: {
+    type: Boolean,
+    default: true,
+  },
+  // 见： https://vant-contrib.gitee.io/vant/v2/#/zh-CN/field
+  name: String,
+  label: {
+    type: String,
+    required: true,
+  },
+  required: Boolean,
+  disabled: Boolean,
+  isLink: {
+    type: Boolean,
+    default: true,
+  },
+  rules: {
+    type: Array,
+    default: () => [],
+  },
+  placeholder: String,
+  // 见 https://vant-contrib.gitee.io/vant/v2/#/zh-CN/picker
+  columns: {
+    type: Array,
+    required: true,
+  },
+  columnsFieldNames: {
+    type: Object,
+    default: () => ({
+      text: 'text',
+      value: 'value',
+      values: 'values',
+      children: 'children',
+    }),
+  },
+  itemHeight: {
+    type: [String, Number],
+    default: 36,
+  },
+});
+
+const showPicker = ref(false);
+const text = ref('');
+const defaultIndex = ref(0);
+const picker = ref(null);
+
+const fieldLabel = computed(() => {
+  return props.removeSpace ? removeSpace(props.label) : props.label;
+});
+const fieldPlaceholder = computed(() => {
+  return props.placeholder || `请输入${fieldLabel.value}`;
+});
+const fieldRules = computed(() => {
+  let rules = [];
+  if (props.required) {
+    rules = [{
       required: true,
-    },
-    // 是否移除lable中间的空格，placeholder 与 只读点击时有效
-    removeSpace: {
-      type: Boolean,
-      default: true,
-    },
-    readonly: Boolean,
-    // 只读时点击反馈
-    reaonlyToast: {
-      type: Boolean,
-      default: true,
-    },
-    // 见： https://vant-contrib.gitee.io/vant/v2/#/zh-CN/field
-    name: String,
-    label: {
-      type: String,
-      required: true,
-    },
-    required: Boolean,
-    disabled: Boolean,
-    isLink: {
-      type: Boolean,
-      default: true,
-    },
-    rules: {
-      type: Array,
-      default: () => [],
-    },
-    placeholder: String,
+      message: fieldPlaceholder.value,
+    }];
+  }
+  return rules.concat(props.rules || []);
+});
 
-    // 见 https://vant-contrib.gitee.io/vant/v2/#/zh-CN/picker
-    columns: {
-      type: Array,
-      required: true,
-    },
-    valueKey: {
-      type: String,
-      default: 'name',
-    },
-    pickerValue: {
-      type: String,
-      default: 'value'
-    },
-    itemHeight: {
-      type: [String, Number],
-      default: 36,
-    },
-  },
+const pickerOptions = computed(() => {
+  return Object.assign({
+    text: 'text',
+    value: 'value',
+    values: 'values',
+    children: 'children',
+  }, props.columnsFieldNames);
+});
 
-  data() {
-    return {
-      showPicker: false,  //  是否显示选项下拉框
-      text: '',           //  当前选中的选项的名称
-      defaultIndex: 0,    //  下拉选项框默认选中项的索引
-    };
-  },
+const pickerValue = computed(() => {
+  const firstColumn = props.columns[0];
+  if (typeof firstColumn === 'string') {
+    return '';
+  }
+  return pickerOptions.value.value;
+});
 
-  computed: {
-    fieldLabel() {
-      return this.removeSpace ? removeSpace(this.label) : this.label;
-    },
-    fieldPlaceholder() {
-      return this.placeholder || `请输入${this.fieldLabel}`;
-    },
-    fieldRules() {
-      let rules = [];
-      if (this.required) {
-        rules = [{
-          required: true,
-          message: this.fieldPlaceholder,
-        }];
-      }
-      return rules.concat(this.rules || []);
-    },
-    dataType() {
-      const columns = this.columns;
-      const firstColumn = columns[0] || {};
-      if (firstColumn[this.pickerValue]) {
-        return this.pickerValue;
-      }
-      return '';
-    },
-  },
+// 数据类型
+const dataType = computed(() => {
+  const firstColumn = props.columns[0];
+  if (typeof firstColumn === 'string') {
+    return 'string';
+  }
+  if (firstColumn[pickerOptions.value.children]) {
+    return 'cascade';
+  }
+  if (firstColumn[pickerOptions.value.values]) {
+    return 'multi';
+  }
+  return 'object';
+});
 
-  watch: {
-    value(newValue) {
-      this.$_updateUI(newValue);
-    },
-    columns: {
-      handler: 'format',
-      immediate: true
+watch(() => props.modelValue, (newValue) => {
+  $_updateUI(newValue);
+}, {
+  immediate: true,
+});
+watch(() => props.columns, format, { deep: true });
+
+function format() {
+  $_updateUI(props.modelValue);
+}
+  // 用户点击选项输入框后触发此事件。
+function onClick() {
+  if (props.disabled || props.readonly) {
+    if (props.reaonlyToast) {
+      Toast(`${fieldLabel.value}不可更改`);
     }
-  },
+    return;
+  }
+  showPicker.value = true;
+}
 
-  methods: {
-    format() {
-      this.$_updateUI(this.value);
-    },
-    // 用户点击选项输入框后触发此事件。
-    onClick() {
-      if (this.disabled || this.readonly) {
-        if (this.reaonlyToast) {
-          Toast(`${this.fieldLabel}不可更改`);
-        }
-        return;
-      }
-      this.showPicker = true;
-    },
+function getPickerValue(item) {
+  let updateValue;
+  if (dataType.value === 'cascade') {
+    item.forEach((i) => {
+      (updateValue || (updateValue = [])).push(i[pickerValue.value]);
+    })
+  } else if (dataType.value === 'object') {
+    updateValue = item[pickerValue.value];
+  } else {
+    updateValue = item;
+  }
+  return updateValue;
+}
 
-    onCancel() {
-      this.showPicker = false;
-      this.$emit('cancel');
-    },
+function onCancel() {
+  showPicker.value = false;
+  emit('cancel');
+}
 
-    // 修改选项下拉框选项后触发的事件。
-    onConfirm(item, index) {
-      this.showPicker = false;
-      this.$emit('input', this.dataType ? item[this.dataType] : item);
-      this.$emit('confirm', cloneDeep(item), index);
-    },
+// 修改选项下拉框选项后触发的事件。
+function onConfirm(item, index) {
+  const updateValue = getPickerValue(item);
+  emit('update:modelValue', updateValue);
+  emit('confirm', updateValue, index);
+  showPicker.value = false;
+}
 
-    // 修改选项下拉框选项后触发的事件。
-    onChange(picker, item, index) {
-      this.$emit('change', cloneDeep(item), index);
-    },
+// 修改选项下拉框选项后触发的事件。
+function onChange(item, index) {
+  emit('change', getPickerValue(item), index);
+}
 
-    // 更新UI界面。
-    $_updateUI(newValue) {
-      if (newValue || +newValue === 0) {
-        // 查找枚举值对应的索引
-        const index = this.columns.findIndex((e) => {
-          return (this.dataType ? e[this.dataType] : e) === newValue
-        });
-        if (index < 0) {
-          this.text = '';
-          this.$_updatePicker(0);
-        } else {
-          this.text = this.dataType ? this.columns[index][this.valueKey] : this.columns[index];
-          this.$_updatePicker(index);
-        }
-      } else {
-        this.text = '';
-        this.$_updatePicker(0);
-      }
-    },
+function $_updateMultiUI(value) {
+  if (!value.length) {
+    return;
+  }
+  let texts = [];
+  let indexs = [];
+  if (dataType.value === 'cascade') {
+    let currentColumn = props.columns;
+    value.forEach((item) => {
+      const index = currentColumn.findIndex((e) => {
+        return (pickerValue.value ? e[pickerValue.value] : e) === item;
+      });
+      const currentData = currentColumn[index];
+      indexs.push(index);
+      texts.push(currentData[pickerOptions.value.text]);
+      currentColumn = currentData[pickerOptions.value.children];
+    });
+  } else {
+    props.columns.forEach((item, i) => {
+      const text = value[i];
+      const index = item[pickerOptions.value.values].findIndex((e) => e === text);
+      indexs.push(index);
+      texts.push(text);
+    });
+  }
+  text.value = texts.join('');
+  $_updatePicker(indexs);
+}
 
-    // 更新下拉框选中项。
-    $_updatePicker(index) {
-      this.defaultIndex = index;
-      const { picker } = this.$refs;
-      if (picker) {
-        picker.setIndexes = [index];
-      }
-    },
-  },
-};
+// 更新UI界面。
+function $_updateUI(newValue) {
+  if (['cascade','multi'].includes(dataType.value)) {
+    $_updateMultiUI(newValue);
+    return;
+  }
+  if (newValue || +newValue === 0) {
+    const index = props.columns.findIndex((e) => {
+      return (pickerValue.value ? e[pickerValue.value] : e) === newValue;
+    });
+    if (index < 0) {
+      text.value = '';
+      $_updatePicker(0);
+    } else {
+      text.value = pickerValue.value ? props.columns[index][pickerOptions.value.text] : props.columns[index];
+      $_updatePicker(index);
+    }
+  } else {
+    text.value = '';
+    $_updatePicker(0);
+  }
+}
+
+// 更新下拉框选中项。
+function $_updatePicker(index) {
+  if (Array.isArray(index)) {
+    if (picker.value) {
+      picker.value.setIndexes = index;
+    }
+    return;
+  }
+  defaultIndex.value = index;
+  if(picker.value) {
+    picker.value.setIndexes = [index];
+  }
+}
 </script>
 
 <style scoped lang="less">

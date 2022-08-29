@@ -32,9 +32,8 @@ const props = defineProps({
   disabled: Boolean,
 });
 const visible = ref(false);
-const checked = toRefs(props).value;
 
-watch(checked, (val) => {
+watch(() => props.value, (val) => {
   visible.value = val;
 })
 
