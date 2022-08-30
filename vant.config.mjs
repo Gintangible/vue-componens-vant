@@ -53,6 +53,10 @@ export default {
             path: 'verify-code-field',
             title: '短信验证码输入框控件',
           },
+          {
+            path: 'identify-code',
+            title: '验证码控件',
+          },
         ],
       },
       // 其他功能的组件库

@@ -10,21 +10,10 @@
     />
   </div>
 </template>
-<script>
-import { Field } from 'vant';
-import IdentifyCode from '../index';
+<script setup>
+import { ref } from 'vue';
+import { Field as VanField } from 'vant';
+import IdentifyCode from '../index.vue';
 
-// identify 的使用例子。
-export default {
-  name: 'identify-demo',
-  components: {
-    [Field.name]: Field,
-    [IdentifyCode.name]: IdentifyCode,
-  },
-  data() {
-    return {
-      identifyCode: 'Gintangible',
-    };
-  },
-};
+const identifyCode = ref('Gintangible');
 </script>
