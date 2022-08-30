@@ -25,7 +25,7 @@ const emit = defineEmits([
 ]);
 
 const props = defineProps({
-  value: Boolean,
+  modelValue: Boolean,
   title: String,
   label: String,
   center: Boolean,
@@ -33,9 +33,9 @@ const props = defineProps({
 });
 const visible = ref(false);
 
-watch(() => props.value, (val) => {
+watch(() => props.modelValue, (val) => {
   visible.value = val;
-})
+}, { immediate: true })
 
 function onChange(val) {
   emit('update:modelValue', val);

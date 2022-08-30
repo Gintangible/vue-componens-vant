@@ -1,6 +1,6 @@
 <template>
   <van-popup
-    v-model="visiable"
+    v-model:show="visiable"
     position="bottom"
     safe-area-inset-bottom
     class="document-popup"
@@ -20,7 +20,7 @@
       />
       <van-button
         v-if="showConfirmButton"
-        type="info"
+        type="primary"
         :size="buttonSize"
         :color="confirmColor"
         :text="confirmText"
@@ -30,101 +30,93 @@
   </van-popup>
 </template>
 
-<script>
-import { Popup, Button } from 'vant';
+<script setup>
+import { ref, computed, watch } from 'vue';
+import { Popup as VanPopup, Button as VanButton } from 'vant';
 
-export default {
-  name: 'DocumentPopup',
+const emit = defineEmits([
+  'update:modelValue',
+  'cancel',
+  'confirm',
+]);
 
-  components: {
-    [Button.name]: Button,
-    [Popup.name]: Popup,
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    required: true,
   },
+  showCancelButton: {
+    type: Boolean,
+    default: true,
+  },
+  cancelText: {
+    type: String,
+    default: '返回',
+  },
+  cancelColor: String,
+  showConfirmButton: {
+    type: Boolean,
+    default: true,
+  },
+  confirmText: {
+    type: String,
+    default: '确定',
+  },
+  confirmColor: String,
+  buttonSize: {
+    type: String,
+    default: 'small',
+    validator: function (val) {
+      return ['large', 'normal', 'small'].includes(val);
+    }
+  },
+  buttonFixed: {
+    type: Boolean,
+    default: true,
+  },
+  buttonClass: String,
+});
 
-  props: {
-    value: {
-      type: Boolean,
-      required: true,
-    },
-    showCancelButton: {
-      type: Boolean,
-      default: true,
-    },
-    cancelText: {
-      type: String,
-      default: '返回',
-    },
-    cancelColor: String,
-    showConfirmButton: {
-      type: Boolean,
-      default: true,
-    },
-    confirmText: {
-      type: String,
-      default: '确定',
-    },
-    confirmColor: String,
-    buttonSize: {
-      type: String,
-      default: 'normal',
-      validator: function (val) {
-        return ['large', 'normal', 'small'].includes(val);
-      }
-    },
-    buttonFixed: {
-      type: Boolean,
-      default: true,
-    },
-    buttonClass: String,
-  },
-  data() {
-    return {
-      visiable: this.value,
-    };
-  },
-  computed: {
-    contentClass() {
-      if (!this.showCancelButton && !this.showConfirmButton) {
-        return '';
-      }
-      if (this.buttonFixed) {
-        return `popup-content_${this.buttonSize}`;
-      }
-    },
-  },
-  watch: {
-    value(newValue) {
-      this.visiable = newValue;
-    },
-  },
-  methods: {
-    hide() {
-      this.visiable = false;
-      this.$emit('input', false);
-    },
-    onConfirm() {
-      if (!this.beforeConfirm) {
-        this.$emit('confirm');
-        this.hide();
-        return;
-      }
-      const beforeConfirm = this.beforeConfirm();
-      if (beforeConfirm && beforeConfirm.then) {
-        beforeConfirm.then(() => {
-          this.$emit('confirm');
-          this.hide();
-        })
-      } else if (beforeConfirm) {
-        this.$emit('confirm');
-        this.hide();
-      }
-    },
-    onCancel() {
-      this.hide();
-      this.$emit('cancel');
-    },
-  },
-};
+const visiable = ref(props.modelValue);
+
+const contentClass = computed(() => {
+  if (!props.showCancelButton && !props.showConfirmButton) {
+    return '';
+  }
+  if (props.buttonFixed) {
+    return `popup-content_${props.buttonSize}`;
+  }
+});
+
+watch(() => props.modelValue, (newValue) => {
+  visiable.value = newValue;
+})
+
+function hide() {
+  emit('update:modelValue', false);
+}
+
+function onConfirm() {
+  if (!props.beforeConfirm) {
+    emit('confirm');
+    hide();
+    return;
+  }
+  const beforeConfirm = props.beforeConfirm();
+  if (beforeConfirm && beforeConfirm.then) {
+    beforeConfirm.then(() => {
+      emit('confirm');
+      hide();
+    })
+  } else if (beforeConfirm) {
+    emit('confirm');
+    hide();
+  }
+}
+function onCancel() {
+  hide();
+  emit('cancel');
+}
 </script>
 
 <style lang="less">

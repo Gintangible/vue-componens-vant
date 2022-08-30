@@ -34,6 +34,10 @@ export default {
             title: '组合Cell和Switch的开关控件',
           },
           {
+            path: 'document-popup',
+            title: '文档查看弹窗',
+          },
+          {
             path: 'enum-select',
             title: '枚举控件',
           },

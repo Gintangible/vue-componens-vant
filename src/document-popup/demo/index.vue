@@ -40,52 +40,39 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import {
-  Form, Field, List, Cell,
+  Form as VanForm,
+  Field as VanField,
+  List as VanList,
+  Cell as VanCell,
 } from 'vant';
-import DocumentPopup from '..';
-import SwitchCell from '../../switch-cell';
+import DocumentPopup from '../index.vue';
+import SwitchCell from '../../switch-cell/index.vue';
+const showDocument = ref(false);
+const buttonFixed = ref(true);
+const cancelText = ref('不确定, 返回确认');
+const showCancelButton = ref(true);
+const cancelColor = ref('#ccc');
+const confirmText = ref('已阅读并确认');
+const confirmColor = ref('#f00');
+const showConfirmButton = ref(true);
+const count = ref(0);
+const events = ref([]);
 
-export default {
-  name: 'DocumentPopupDemo',
-  components: {
-    [Form.name]: Form,
-    [Field.name]: Field,
-    [List.name]: List,
-    [Cell.name]: Cell,
-    [SwitchCell.name]: SwitchCell,
-    [DocumentPopup.name]: DocumentPopup,
-  },
-  data() {
-    return {
-      showDocument: false,
-      buttonFixed: false,
-      cancelText: '不确定, 返回确认',
-      showCancelButton: false,
-      cancelColor: '#ccc',
-      confirmText: '已阅读并确认',
-      confirmColor: '#f00',
-      showConfirmButton: false,
-      count: 0,
-      events: [],
-    };
-  },
-  methods: {
-    onConfirm() {
-      this.events.unshift({
-        order: ++this.count,
-        name: 'confirm',
-      });
-    },
-    onCancel() {
-      this.events.unshift({
-        order: ++this.count,
-        name: 'cancel',
-      });
-    },
-  },
-};
+function onConfirm() {
+  events.value.unshift({
+    order: ++count.value,
+    name: 'confirm',
+  });
+}
+function onCancel() {
+  events.value.unshift({
+    order: ++count.value,
+    name: 'cancel',
+  });
+}
 </script>
 
 <style scoped>

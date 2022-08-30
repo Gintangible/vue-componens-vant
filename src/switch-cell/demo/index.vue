@@ -38,7 +38,7 @@ import SwitchCell from '../index.vue';
 
 const valueText = ref('测试描述');
 const label = ref('SwitchCellLable');
-const checked = ref(false);
+const checked = ref(true);
 const disabled = ref(false);
 const count = ref(0);
 const events = reactive([]);
