@@ -62,7 +62,7 @@ function validate() {
 }
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .panel-form {
   background: #fff;
   border-radius: 5px;
