@@ -21,7 +21,7 @@
       {{ formValues }}
     </van-cell>
     <van-button
-      type="info"
+      type="primary"
       block
       size="small"
       text="提交"
@@ -29,32 +29,22 @@
     />
   </van-form>
 </template>
-<script>
-import { Form, Cell, Button } from 'vant';
-import SwitchCell from '../../switch-cell';
-import DatetimeRange from '../index';
 
-export default {
-  name: 'DatetimeRangeDemo',
-  components: {
-    [Form.name]: Form,
-    [Cell.name]: Cell,
-    [Button.name]: Button,
-    [SwitchCell.name]: SwitchCell,
-    [DatetimeRange.name]: DatetimeRange,
-  },
-  data() {
-    return {
-      formValues: {},
-      dataRange: [],
-    };
-  },
-  methods: {
-    onSubmit(values) {
-      this.formValues = values;
-    },
-  },
-};
+<script setup>
+import { ref } from 'vue';
+import {
+  Form as VanForm,
+  Cell as VanCell,
+  Button as VanButton,
+} from 'vant';
+import SwitchCell from '../../switch-cell/index.vue';
+import DatetimeRange from '../index.vue';
+
+const formValues = ref({});
+const dataRange = ref([]);
+function onSubmit(values) {
+  formValues.value = values;
+}
 </script>
 
 <style lang="less" scoped>

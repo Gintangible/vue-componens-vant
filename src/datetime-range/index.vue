@@ -47,112 +47,99 @@
   </div>
 </template>
 
-<script>
-import DatetimeSelect from '../datetime-select';
+<script setup>
+import { ref, computed, watch } from 'vue';
+import DatetimeSelect from '../datetime-select/index.vue';
 import dayjs from 'dayjs';
 
-export default {
-  name: 'DatetimeRange',
-  components: {
-    [DatetimeSelect.name]: DatetimeSelect,
-  },
-  props: {
-    // 时间区间
-    value: {
-      type: Array,
-      required: true,
-    },
-    startName: String,
-    endName: String,
-    // 选中的日期时间数值的格式
-    valueFormat: {
-      type: String,
-      default: 'YYYY-MM-DD',
-    },
-    startLabel: {
-      type: String,
-      default: '',
-    },
-    startPlaceholder: {
-      type: String,
-      default: '开始时间',
-    },
-    endLabel: {
-      type: String,
-      default: '',
-    },
-    endPlaceholder: {
-      type: String,
-      default: '结束时间',
-    },
-    displayFormat: {
-      type: String,
-      default: 'YYYY-MM-DD',
-    },
-    // 时间类型
-    type: {
-      type: String,
-      default: 'date',
-    },
-    // 时间验证规则
-    rules: {
-      type: Array,
-      default: () => [],
-    },
-    separator: {
-      type: String,
-      default: '/',
-    },
-    inline: {
-      type: Boolean,
-      default: true,
-    },
-    isLink: Boolean,
-    inputAlign: {
-      type: String,
-      default: 'center',
-    },
-    minDate: Date,
-    maxDate: Date,
-  },
-  data() {
-    return {
-      startDate: '',
-      endDate: '',
-    };
-  },
-  computed: {
-    endMinDate() {
-      const startTime = this.startDate || dayjs();
-      return dayjs(startTime).toDate();
-    },
-    startMaxDate() {
-      const endTime = this.endDate || this.rangeMaxDate;
-      return dayjs(endTime).toDate();
-    },
-  },
-  watch: {
-    value: {
-      deep: true,
-      handler() {
-        this.getAnalysisDate();
-      },
-    },
-  },
-  created() {
-    this.getAnalysisDate();
-  },
-  methods: {
-    getAnalysisDate() {
-      this.startDate = this.value[0];
-      this.endDate = this.value[1];
-    },
+const emit = defineEmits([
+  'update:modelValue',
+]);
 
-    onConfirm() {
-      this.$emit('input', [this.startDate, this.endDate]);
-    },
+const props = defineProps({
+  // 时间区间
+  modelValue: {
+    type: Array,
+    required: true,
   },
-};
+  startName: String,
+  endName: String,
+  // 选中的日期时间数值的格式
+  valueFormat: {
+    type: String,
+    default: 'YYYY-MM-DD',
+  },
+  startLabel: {
+    type: String,
+    default: '',
+  },
+  startPlaceholder: {
+    type: String,
+    default: '开始时间',
+  },
+  endLabel: {
+    type: String,
+    default: '',
+  },
+  endPlaceholder: {
+    type: String,
+    default: '结束时间',
+  },
+  displayFormat: {
+    type: String,
+    default: 'YYYY-MM-DD',
+  },
+  // 时间类型
+  type: {
+    type: String,
+    default: 'date',
+  },
+  // 时间验证规则
+  rules: {
+    type: Array,
+    default: () => [],
+  },
+  separator: {
+    type: String,
+    default: '/',
+  },
+  inline: {
+    type: Boolean,
+    default: true,
+  },
+  isLink: Boolean,
+  inputAlign: {
+    type: String,
+    default: 'center',
+  },
+  minDate: Date,
+  maxDate: Date,
+});
+
+const startDate = ref('');
+const endDate = ref('');
+
+const endMinDate = computed(() => {
+  const startTime = startDate.value || props.minDate;
+  return dayjs(startTime).toDate();
+});
+const startMaxDate = computed(() => {
+  const endTime = endDate.value || props.maxDate;
+  return dayjs(endTime).toDate();
+})
+
+watch(() => props.modelValue, () => {
+  getAnalysisDate();
+}, { deep: true, immediate: true });
+
+function getAnalysisDate() {
+  startDate.value = props.modelValue[0];
+  endDate.value = props.modelValue[1];
+}
+
+function onConfirm() {
+  emit('update:modelValue', [startDate.value, endDate.value]);
+}
 </script>
 
 <style lang="less" scoped>
