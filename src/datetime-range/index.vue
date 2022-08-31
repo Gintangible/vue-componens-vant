@@ -123,11 +123,11 @@ export default {
   },
   computed: {
     endMinDate() {
-      const startTime = this.startDate || dayjs();
+      const startTime = this.startDate || this.minDate;
       return dayjs(startTime).toDate();
     },
     startMaxDate() {
-      const endTime = this.endDate || this.rangeMaxDate;
+      const endTime = this.endDate || this.maxDate;
       return dayjs(endTime).toDate();
     },
   },
