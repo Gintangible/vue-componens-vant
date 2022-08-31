@@ -42,6 +42,10 @@ export default {
             title: '日期区间控件',
           },
           {
+            path: 'calendar-field',
+            title: '日历控件',
+          },
+          {
             path: 'document-popup',
             title: '文档查看弹窗',
           },

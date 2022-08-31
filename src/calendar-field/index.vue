@@ -2,7 +2,7 @@
   <div class="calendar-range">
     <van-field
       :name="name"
-      :value="text"
+      :model-value="text"
       :label="label"
       :placeholder="placeholder || `请选择${label}`"
       readonly
@@ -15,7 +15,7 @@
       @click="onClick"
     />
     <van-calendar
-      v-model="showCalendar"
+      v-model:show="showCalendar"
       type="range"
       :row-height="rowHeight"
       :color="color"
@@ -30,118 +30,104 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, watch } from 'vue';
 import dayjs from 'dayjs';
-import { Field, Calendar } from 'vant';
+import { Field as VanField, Calendar as VanCalendar } from 'vant';
 
-export default {
-  name: 'CalendarField',
+const emit = defineEmits([
+  'update:modelValue',
+]);
 
-  components: {
-    [Field.name]: Field,
-    [Calendar.name]: Calendar,
+const props = defineProps({
+  name: String,
+  modelValue: {
+    type: Array,
+    required: true,
   },
-  props: {
-    name: String,
-    value: {
-      type: Array,
+  label: {
+    type: String,
+    default: '时间区间'
+  },
+  displayFormat: {
+    type: String,
+    default: 'YYYY-MM-DD',
+  },
+  valueFormat: {
+    type: String,
+    default: 'YYYY-MM-DDTHH:mmZ',
+  },
+  placeholder: String,
+  required: Boolean,
+  isLink: Boolean,
+  readonly: Boolean,
+  disabled: Boolean,
+  rules: Array,
+  separator: {
+    type: String,
+    default: ' / ',
+  },
+  inputAlign: String,
+  color: {
+    type: String,
+    default: '#1989fa',
+  },
+  showTitle: {
+    type: Boolean,
+    default: true,
+  },
+  showSubtitle: {
+    type: Boolean,
+    default: true,
+  },
+  rowHeight: [String, Number],
+  maxRange: [Number, String],
+  minDate: Date,
+  maxDate: Date,
+  formatter: Function,
+});
+
+const showCalendar = ref(false);
+const text = ref('');
+
+const fieldRules = computed(() => {
+  let rules = [];
+  if (props.required) {
+    rules = [{
       required: true,
-    },
-    label: {
-      type: String,
-      default: '时间区间'
-    },
-    displayFormat: {
-      type: String,
-      default: 'YYYY-MM-DD',
-    },
-    valueFormat: {
-      type: String,
-      default: 'YYYY-MM-DDTHH:mmZ',
-    },
-    placeholder: String,
-    required: Boolean,
-    isLink: Boolean,
-    readonly: Boolean,
-    disabled: Boolean,
-    rules: Array,
-    separator: {
-      type: String,
-      default: ' / ',
-    },
-    inputAlign: String,
-    color: {
-      type: String,
-      default: '#1989fa',
-    },
-    showTitle: {
-      type: Boolean,
-      default: true,
-    },
-    showSubtitle: {
-      type: Boolean,
-      default: true,
-    },
-    rowHeight: [String, Number],
-    maxRange: [Number, String],
-    minDate: Date,
-    maxDate: Date,
-    formatter: Function,
-  },
-  data() {
-    return {
-      showCalendar: false,
-      text: '',
-    };
-  },
+    }];
+  }
+  return rules.concat(props.rules || []);
+});
 
-  computed: {
-    // form 表单只能检测field的值，field不支持数组。
-    fieldRules() {
-      let rules = [];
-      if (this.required) {
-        rules = [{
-          required: true,
-        }];
-      }
-      return rules.concat(this.rules || []);
-    },
-  },
+watch(() => props.modelValue, () => {
+  getAnalysisDate();
+}, {
+  deep: true,
+  immediate: true,
+});
 
-  watch: {
-    value: {
-      deep: true,
-      immediate: true,
-      handler() {
-        this.getAnalysisDate();
-      },
-    },
-  },
+function getAnalysisDate() {
+  const displayFormat = props.modelValue.map((e) => {
+    return dayjs(e).format(props.displayFormat);
+  })
+  text.value = displayFormat.join(props.separator);
+}
 
-  methods: {
-    getAnalysisDate() {
-      const displayFormat = this.value.map((e) => {
-        return dayjs(e).format(this.displayFormat);
-      })
-      this.text = displayFormat.join(this.separator);
-    },
+function onClick() {
+  if (props.readonly || props.disabled) {
+    return;
+  }
+  showCalendar.value = true
+}
 
-    onClick() {
-      if (this.readonly || this.disabled) {
-        return;
-      }
-      this.showCalendar = true
-    },
-
-    onConfirm(value) {
-      this.showCalendar = false;
-      const valueFormat = value.map((e) => {
-        return dayjs(e).format(this.valueFormat);
-      })
-      this.$emit('input', valueFormat);
-    },
-  },
-};
+function onConfirm(value) {
+  showCalendar.value = false;
+  const valueFormat = value.map((e) => {
+    return dayjs(e).format(props.valueFormat);
+  })
+  emit('update:modelValue', valueFormat);
+}
 </script>
 
 <style lang="less" scoped>

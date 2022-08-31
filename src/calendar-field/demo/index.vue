@@ -26,7 +26,7 @@
       {{ formValues }}
     </van-cell>
     <van-button
-      type="info"
+      type="primary"
       block
       size="small"
       text="提交"
@@ -34,42 +34,33 @@
     />
   </van-form>
 </template>
-<script>
-import { Form, Button, Cell } from 'vant';
-import dayjs from 'dayjs';
-import SwitchCell from '../../switch-cell';
-import CalendarField from '../index';
 
-export default {
-  name: 'DatetimeRangeDemo',
-  components: {
-    [Form.name]: Form,
-    [Button.name]: Button,
-    [Cell.name]: Cell,
-    [SwitchCell.name]: SwitchCell,
-    [CalendarField.name]: CalendarField,
-  },
-  data() {
-    return {
-      formValues: {},
-      dataRange: [],
-      readonly: false,
-      disabled: false,
-      required: false,
-      rules: [{
-        required: true,
-        message: '简单验证日期',
-        // trigger: 'onChange',
-        validator: (val) => val === dayjs().format('YYYY-MM-DDTHH:mmZ'),
-      }],
-    };
-  },
-  methods: {
-    onSubmit(values) {
-      this.formValues = values;
-    },
-  },
-};
+<script setup>
+import { ref } from 'vue';
+import {
+  Form as VanForm,
+  Button as VanButton,
+  Cell as VanCell,
+} from 'vant';
+import dayjs from 'dayjs';
+import SwitchCell from '../../switch-cell/index.vue';
+import CalendarField from '../index.vue';
+
+const formValues = ref({});
+const dataRange = ref([]);
+const readonly = ref(false);
+const disabled = ref(false);
+const required = ref(false);
+const rules = ref([{
+  required: true,
+  message: '简单验证日期',
+  // trigger: 'onChange',
+  validator: (val) => val === dayjs().format('YYYY-MM-DDTHH:mmZ'),
+}]);
+
+function onSubmit(values) {
+  formValues.value = values;
+}
 </script>
 
 <style lang="less" scoped>
