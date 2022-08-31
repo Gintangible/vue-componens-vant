@@ -127,7 +127,7 @@ export default {
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 .document-popup {
   height: 100vh;
   .popup-content {
