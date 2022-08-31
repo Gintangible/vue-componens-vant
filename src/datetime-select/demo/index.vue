@@ -107,38 +107,28 @@
     </van-form>
   </div>
 </template>
-<script>
-import { Form, Field, Cell } from 'vant';
+<script setup>
+import { ref } from 'vue';
+import {
+  Form as VanForm,
+  Field as VanField,
+  Cell as VanCell,
+} from 'vant';
 import dayjs from 'dayjs';
-import SwitchCell from '../../switch-cell';
-import DatetimeSelect from '../index';
+import SwitchCell from '../../switch-cell/index.vue';
+import DatetimeSelect from '../index.vue';
 
-// DateSelect 组件示例。
-export default {
-  name: 'date-select-demo',
-  components: {
-    [Form.name]: Form,
-    [Field.name]: Field,
-    [Cell.name]: Cell,
-    [SwitchCell.name]: SwitchCell,
-    [DatetimeSelect.name]: DatetimeSelect,
-  },
-  data() {
-    return {
-      datetime: dayjs().format('YYYY-MM-DDTHH:mmZ'),
-      date: dayjs().format('YYYY-MM-DD'),
-      time: dayjs().format('HH:mm'),
-      yearmonth: dayjs().format('YYYY-MM'),
-      monthday: dayjs().format('MM-DD'),
-      datehour: dayjs().format('YYYY-MM-DDTHH:00Z'),
-      disabled: false,
-      rules: [{
-        required: true,
-        message: '简单验证日期',
-        // trigger: 'onChange',
-        validator: (val) => val === dayjs().format('YYYY-MM-DDTHH:mmZ'),
-      }],
-    };
-  },
-};
+const datetime = ref(dayjs().format('YYYY-MM-DDTHH:mmZ'));
+const date = ref(dayjs().format('YYYY-MM-DD'));
+const time = ref(dayjs().format('HH:mm'));
+const yearmonth = ref(dayjs().format('YYYY-MM'));
+const monthday = ref(dayjs().format('MM-DD'));
+const datehour = ref(dayjs().format('YYYY-MM-DDTHH:00Z'));
+const disabled = ref(false);
+const rules = ref([{
+  required: true,
+  message: '简单验证日期',
+  // trigger: 'onChange',
+  validator: (val) => val === dayjs().format('YYYY-MM-DDTHH:mmZ'),
+}]);
 </script>
