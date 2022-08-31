@@ -65,6 +65,10 @@ export default {
             path: 'identify-code',
             title: '验证码控件',
           },
+          {
+            path: 'uploader',
+            title: '上传控件',
+          },
         ],
       },
       // 其他功能的组件库
