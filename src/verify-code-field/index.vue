@@ -11,7 +11,7 @@
       <van-button
         size="small"
         type="info"
-        :disabled="showCountDown"
+        :disabled="disabled || showCountDown"
         @click="onClickSend"
       >
         <van-count-down
@@ -50,6 +50,7 @@ export default {
       default: '短信验证码',
     },
     placeholder: String,
+    disabled: Boolean,
     sendButtonText: {
       type: String,
       default: '发送验证码',
