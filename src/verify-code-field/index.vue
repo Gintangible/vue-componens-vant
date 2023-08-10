@@ -1,6 +1,6 @@
 <template>
   <van-field
-    v-model="code"
+    v-model.trim="code"
     center
     clearable
     :label="label"
@@ -49,7 +49,10 @@ export default {
       type: String,
       default: '短信验证码',
     },
-    placeholder: String,
+    placeholder: {
+      type: String,
+      default: '',
+    },
     disabled: Boolean,
     sendButtonText: {
       type: String,
@@ -67,6 +70,8 @@ export default {
       type: String,
       default: '#fff',
     },
+    // eslint-disable-next-line
+    onSend: Function,
   },
   data() {
     return {
@@ -82,8 +87,19 @@ export default {
   },
   methods: {
     onClickSend() {
-      this.$emit('send');
-      this.showCountDown = true;
+      if (this.onSend) {
+        const res = this.onSend();
+        if (!res) {
+          return;
+        }
+        if (res.then) {
+          res.then(() => {
+            this.showCountDown = true;
+          }).catch(() => {
+            this.showCountDown = false;
+          });
+        }
+      }
     },
 
     onCountDownFinish() {
@@ -92,7 +108,7 @@ export default {
     },
 
     onBlur() {
-      this.$emit('blur', this.code.trim());
+      this.$emit('blur', this.code);
     },
   },
 };
