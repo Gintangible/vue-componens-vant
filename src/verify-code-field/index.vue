@@ -6,6 +6,7 @@
     :label="label"
     :placeholder="placeholder || `请填写${label}`"
     @blur="onBlur"
+    @input="onChange"
   >
     <template #button>
       <van-button
@@ -101,12 +102,13 @@ export default {
         }
       }
     },
-
     onCountDownFinish() {
       this.buttonText = this.resendButtonText;
       this.showCountDown = false;
     },
-
+    onChange() {
+      this.$emit('input', this.code);
+    },
     onBlur() {
       this.$emit('blur', this.code);
     },
