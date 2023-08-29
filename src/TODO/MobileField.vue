@@ -97,14 +97,14 @@ export default {
     onChange(value) {
       this.mobile = value?.toUpperCase();
       this.$emit('clear-error');
+      this.$emit('input', this.mobile);
     },
     onBlur() {
       const result = this.validate(this.mobile);
+      this.$emit('input', this.mobile);
+      this.$emit('change', this.mobile);
       if (!result) {
         this.$emit('error', this.errorMessage);
-      } else {
-        this.$emit('input', this.mobile);
-        this.$emit('change', this.mobile);
       }
     },
   },

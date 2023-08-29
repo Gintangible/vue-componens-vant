@@ -101,15 +101,15 @@ export default {
     onChange(value) {
       this.text = value?.toUpperCase();
       this.$emit('clear-error');
+      this.$emit('input', this.text);
     },
 
     onBlur() {
       const result = this.validate(this.text);
+      this.$emit('input', this.text);
+      this.$emit('change', this.mobile);
       if (!result) {
         this.$emit('error', this.errorMessage);
-      } else {
-        this.$emit('input', this.text);
-        this.$emit('change', this.mobile);
       }
     },
   },

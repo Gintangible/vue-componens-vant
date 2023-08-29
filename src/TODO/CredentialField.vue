@@ -134,6 +134,7 @@ export default {
       number = number?.toUpperCase();
       this.credential.number = number;
       this.$emit('clear-error');
+      this.$emit('input', Credential.create(this.credential));
     },
 
     onNumberFieldClick() {
@@ -149,12 +150,11 @@ export default {
         return;
       }
       const result = this.validate(this.credential.number);
+      this.$emit('change-number', this.credential.number);
+      this.$emit('input', Credential.create(this.credential));
+      this.$emit('change', Credential.create(this.credential));
       if (!result) {
         this.$emit('error', this.errorMessage);
-      } else {
-        this.$emit('change-number', this.credential.number);
-        this.$emit('input', Credential.create(this.credential));
-        this.$emit('change', Credential.create(this.credential));
       }
     },
   },
