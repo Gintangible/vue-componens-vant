@@ -20,6 +20,7 @@
 <script>
 import { Field, Toast } from 'vant';
 import { removemidspace } from '@njzhyl/common-filter';
+import Mobile from '@/models/validate/mobile';
 
 export default {
   name: 'MobileField',
@@ -47,6 +48,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    validator: {
+      type: Function,
+      default: Mobile.isValid,
+    },
     label: {                          // 手机号码输入框标签
       type: String,
       default: '手机号码',
@@ -72,7 +77,7 @@ export default {
         required: this.required,
         trigger: 'onBlur',
         message: this.errorMessage,
-        validator: (val) => this.validate(val),
+        validator: (val) => this.validator(val),
       }].concat(this.rules);
     },
   },
@@ -91,18 +96,15 @@ export default {
         Toast(`${label}不可更改`);
       }
     },
-    validate(val) {
-      return /^(0|86|17951)?(1[3-9])[0-9]{9}$/.test(val);
-    },
     onChange(value) {
       this.mobile = value?.toUpperCase();
       this.$emit('clear-error');
       this.$emit('input', this.mobile);
     },
     onBlur() {
-      const result = this.validate(this.mobile);
       this.$emit('input', this.mobile);
       this.$emit('change', this.mobile);
+      const result = this.validator(this.mobile);
       if (!result) {
         this.$emit('error', this.errorMessage);
       }

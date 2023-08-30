@@ -30,9 +30,10 @@
 
 <script>
 import { Field, Toast } from 'vant';
-import { Credential, CREDENTIAL_TYPES } from '@njzhyl/common-model';
 import { removemidspace } from '@njzhyl/common-filter';
+import { CREDENTIAL_TYPES } from '@/models/common/credential';
 import EnumSelect from '@/components/EnumSelect';
+import Credential from '@/models/Credential';
 
 export default {
   name: 'CredentialField',
@@ -100,7 +101,7 @@ export default {
         required: this.required,
         trigger: 'onBlur',
         message: this.errorMessage,
-        validator: (val) => this.validate(val),
+        validator: () => this.credential.validate(),
       }].concat(this.numberRules);
     },
   },
@@ -114,12 +115,9 @@ export default {
     },
   },
   methods: {
-    validate(val) {
-      return /^[1-9]\d{5}(19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(val);
-    },
     onConfirmType(type) {
       // 修改证件类型，并将其号码清空
-      this.credential.changeType(type);
+      // this.credential.changeType(type);
       this.$emit('clear-error');
       this.$emit('confirm-type', type);
       this.$emit('input', Credential.create(this.credential));   // 注意传递对象必须clone()
@@ -149,7 +147,7 @@ export default {
       if (this.readonly || this.numberReadonly) {
         return;
       }
-      const result = this.validate(this.credential.number);
+      const result = this.credential.validate();
       this.$emit('change-number', this.credential.number);
       this.$emit('input', Credential.create(this.credential));
       this.$emit('change', Credential.create(this.credential));
@@ -161,4 +159,11 @@ export default {
 };
 </script>
 <style scoped lang="less">
+.credential-field {
+  :deep(.van-field) {
+    &:after {
+      display: block;
+    }
+  }
+}
 </style>
