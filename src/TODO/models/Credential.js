@@ -1,5 +1,5 @@
 import { DEFAULT_CREDENTIAL_TYPE } from '@/models/common/credential';
-import IdentityCard from './validate/identity-card';
+import IdentityCard from './validate/IdentityCard';
 
 class Credential {
   constructor(type = DEFAULT_CREDENTIAL_TYPE.value, number = '') {

@@ -1,4 +1,4 @@
-import { Gender } from '@njzhyl/common-model';
+import { GENDER_MAP } from '@/models/common/Gender';
 import { CREDENTIAL_TYPE_MAP } from '@/models/common/credential';
 
 export default {
@@ -17,7 +17,7 @@ export default {
       return null;
     }
     const digit = number.charCodeAt(16) - 48;
-    return (digit % 2 === 1 ? Gender.MALE.value : Gender.FEMALE.value);
+    return (digit % 2 === 1 ? GENDER_MAP.MALE.value : GENDER_MAP.FEMALE.value);
   },
 
   getBirthday(number) {
